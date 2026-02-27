@@ -47,9 +47,11 @@
                 <div class="sidebar-section-title">Part 3 — GitHub</div>
                 <ul class="sidebar-nav">
                     <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                     <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                 </ul>
             </div>
             <div class="sidebar-progress">
@@ -378,14 +380,240 @@ Automatic merge failed; fix conflicts and then commit.</span></code></pre>
                     </div>
                 </div>
 
+                <!-- 실습 섹션 -->
+                <div class="practice-section">
+                    <div class="practice-header">
+                        <div class="practice-badge">🔨 실습 해보기</div>
+                        <div class="practice-title">브랜치 만들고 Merge하기 + 충돌 직접 해결하기</div>
+                        <p class="practice-desc">이론에서 배운 Fast-forward와 3-way Merge, 충돌 실습을 한 번씩 직접 해보는 2가지 미션입니다.</p>
+                        <div class="mission-progress">
+                            <div class="mission-progress-bar">
+                                <div class="mission-progress-fill"></div>
+                            </div>
+                            <span class="mission-progress-label">0 / 7 완료</span>
+                        </div>
+                    </div>
+                    <div class="practice-body">
+                        <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px">🎯 미션 A —
+                            Fast-forward Merge</div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">1</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">프로젝트 준비 + main에 첫 커밋</div>
+                                <p class="practice-step-desc">브랜치 실습용 폴더를 만들고 첫 커밋을 만들어 둥니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> mkdir branch-practice &amp;&amp; cd branch-practice
+<span class="prompt">$</span> git init &amp;&amp; touch index.html
+<span class="prompt">$</span> git add . &amp;&amp; git commit -m "feat: index.html 추가"</code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">2</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">feature 브랜치 만들고 커밋</div>
+                                <p class="practice-step-desc">이론의 SVG처럼, main에서 분기해 독립적으로 커밋합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git switch -c feature/about
+<span class="prompt">$</span> touch about.html
+<span class="prompt">$</span> git add . &amp;&amp; git commit -m "feat: about 페이지 추가"</code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">브랜치 분기 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-lr" style="flex:2">
+                                            <div class="state-area-name state-area-name-lr">main</div>
+                                            <div class="state-file committed">◆ index.html 커밋</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">분기점</div>
+                                        </div>
+                                        <div class="state-area state-area-sa" style="flex:2">
+                                            <div class="state-area-name state-area-name-sa">feature/about</div>
+                                            <div class="state-file committed">◆ index.html</div>
+                                            <div class="state-file staged">◆ about.html (뉴)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">3</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">main으로 돌아가 Fast-forward Merge</div>
+                                <p class="practice-step-desc">main에 없던 about.html이 생깁니다! 이론의 "포인터만 이동" SVG를 참고하세요.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git switch main
+<span class="prompt">$</span> ls
+<span class="output">index.html  ← about.html 없음!</span>
+<span class="prompt">$</span> git merge feature/about
+<span class="output">Fast-forward
+ about.html | 0
+ 1 file changed</span>
+<span class="prompt">$</span> ls
+<span class="output">about.html  index.html  ← 넡!
+</span><span class="prompt">$</span> git branch -d feature/about</code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div
+                            style="font-size:13px;font-weight:700;color:var(--accent);margin:20px 0 12px;padding-top:20px;border-top:1px solid var(--border)">
+                            🗿 미션 B — 충돌 만들고 해결하기</div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">4</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">main에서 첫 변경 + 커밋</div>
+                                <p class="practice-step-desc">충돌 조건 만들기: main에서 index.html을 먼저 수정합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> echo "&lt;h1&gt;안녕하세요&lt;/h1&gt;" &gt; index.html
+<span class="prompt">$</span> git add . &amp;&amp; git commit -m "fix: 헤더 한국어로"</code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">5</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">feature 브랜치에서 같은 줄 다르게 수정 + 커밋</div>
+                                <p class="practice-step-desc">이론의 3-way Merge 조건입니다! 같은 파일의 같은 줄을 서로 다르게 수정하는 상황을 만들거니다.
+                                </p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git switch -c feature/header
+<span class="prompt">$</span> echo "&lt;h1&gt;Hello World&lt;/h1&gt;" &gt; index.html
+<span class="prompt">$</span> git add . &amp;&amp; git commit -m "feat: 헤더 영어로"</code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">6</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">Merge → CONFLICT 확인!</div>
+                                <p class="practice-step-desc">main으로 돌아가 merge하면 충돌이 납니다. 이론의
+                                    &lt;&lt;&lt;&lt;&lt;&lt;&lt; / ======= / &gt;&gt;&gt;&gt;&gt;&gt;&gt; 마커를 눈으로 확인하세요!
+                                </p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git switch main
+<span class="prompt">$</span> git merge feature/header
+<span class="output">CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit.</span>
+<span class="prompt">$</span> cat index.html
+<span class="output">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;안녕하세요&lt;/h1&gt;
+=======
+&lt;h1&gt;Hello World&lt;/h1&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/header</span></code></pre>
+                                </div>
+                                <div class="alert warning" style="margin-top:8px">
+                                    <span class="alert-icon">⚠️</span>
+                                    <p>이론의 충돌 파일 다이어그램과 동일한 상황입니다! <<<,===,>>> 표시를 모두 제거하고 원하는 내용만 남기세요.</p>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">7</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">충돌 파일 수정 → add → commit</div>
+                                <p class="practice-step-desc">충돌 마커를 제거하고 원하는 내용만 남기세요. 그리고 add + commit으로 충돌 해결 커밋을
+                                    만들어독니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># index.html을 에디터로 열어 충돌 마커 제거 및 저장</span>
+<span class="prompt">$</span> git add index.html
+<span class="prompt">$</span> git commit -m "merge: feature/header 충돌 해결"
+<span class="prompt">$</span> git log --oneline --graph
+<span class="output">*   9f8e3d1 merge: feature/header 충돌 해결
+|\  
+| * 7b3c1d0 feat: 헤더 영어로
+* | 2f4a8e9 fix: 헤더 한국어로
+|/  
+* a3f82bc feat: index.html 추가</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="scenarios-wrap">
+                            <div class="scenarios-title">🧪 이런 상황, 어떻게 할까요?</div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😰</span><span
+                                        class="scenario-question"><code>git switch feature</code> 했는데 "Your local
+                                        changes would be overwritten" 오류가 나요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">동일 파일에 변경사항이 있고, 두 브랜치가 서로 다른 버전을 가지고 있는 경우입니다.</p>
+                                    <p class="scenario-fix">커밋하거나 <code>git stash</code>로 임시 저장 후 전환하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😕</span><span
+                                        class="scenario-question">실수로 main에 직접 커밋합니다!</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">main에서 브랜치 없이 커밋한 상황입니다.</p>
+                                    <p class="scenario-fix"><code>git reset --soft HEAD~1</code>로 커밋을 취소하고, 새 브랜치를 만들어서
+                                        다시 커밋하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😱</span><span
+                                        class="scenario-question">브랜치 이름을 잠못 지었어요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">브랜치 이름은 나중에 바꿀 수 있습니다.</p>
+                                    <p class="scenario-fix"><code>git branch -m 앞이름 새이름</code>으로 변경하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">💡</span><span
+                                        class="scenario-question">merge 전에 차이를 미리 보고 싶어요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">merge 전 diff 확인이 가능합니다.</p>
+                                    <p class="scenario-fix"><code>git diff main feature/xxx</code>로 두 브랜치의 차이를 미리 확인할 수
+                                        있습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practice-complete-banner">🎉 모든 Step 완료! Fast-forward Merge와 충돌 해결을 직접 해봤습니다.</div>
+                    </div>
+                </div>
+
                 <div class="chapter-nav">
-                    <a href="05-log-head.html" class="nav-btn">← Ch.05 HEAD & 히스토리</a>
+                    <a href="05-log-head.html" class="nav-btn">← Ch.05 HEAD &amp; 히스토리</a>
                     <a href="07-undo.html" class="nav-btn next">Ch.07 실수 되돌리기 →</a>
                 </div>
             </article>
         </div>
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/practice.js"></script>
 </body>
 
 </html>

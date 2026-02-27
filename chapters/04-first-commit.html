@@ -47,9 +47,11 @@
                 <div class="sidebar-section-title">Part 3 — GitHub</div>
                 <ul class="sidebar-nav">
                     <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                     <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                 </ul>
             </div>
             <div class="sidebar-progress">
@@ -574,14 +576,272 @@ secret.txt</code></pre>
                     </div>
                 </div>
 
+                <!-- 실습 섹션 -->
+                <div class="practice-section">
+                    <div class="practice-header">
+                        <div class="practice-badge">🔨 실습 해보기</div>
+                        <div class="practice-title">내 포트폴리오 프로젝트를 Git으로 관리하기</div>
+                        <p class="practice-desc">이론을 따라합니다. 물론 커밋 메시지 콘벤션(feat:/fix:/docs: 등)과 <code>.gitignore</code>도
+                            직접 만들어보세요.</p>
+                        <div class="mission-progress">
+                            <div class="mission-progress-bar">
+                                <div class="mission-progress-fill"></div>
+                            </div>
+                            <span class="mission-progress-label">0 / 5 완료</span>
+                        </div>
+                    </div>
+                    <div class="practice-body">
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">1</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">포트폴리오 폴더 만들고 git init</div>
+                                <p class="practice-step-desc">이론의 STEP 1과 동일합니다. 이번에는 나만의 포트폴리오 프로젝트로 시작합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> mkdir my-portfolio && cd my-portfolio
+<span class="prompt">$</span> git init
+<span class="output">Initialized empty Git repository in .../my-portfolio/.git/</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 1 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">.git 생성</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">touch README.md index.html style.css</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">2</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">파일 3개 생성 → 선택적 add → 콘벤션 메시지로 커밋</div>
+                                <p class="practice-step-desc">이론의 커밋 메시지 표(커뮨던션 컴밋)를 사용합니다. 파일마다 관련 있는 타입 접두사를 됐어 커밋합니다.
+                                </p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> touch README.md index.html style.css
+
+<span class="comment"># docs: 로 README 커밋</span>
+<span class="prompt">$</span> git add README.md
+<span class="prompt">$</span> git commit -m "docs: README 추가"
+
+<span class="comment"># feat: 로 메인 페이지 커밋</span>
+<span class="prompt">$</span> git add index.html
+<span class="prompt">$</span> git commit -m "feat: 메인 페이지 추가"
+
+<span class="comment"># style: 로 CSS 커밋</span>
+<span class="prompt">$</span> git add style.css
+<span class="prompt">$</span> git commit -m "style: 기본 CSS 추가"</code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">커밋 3개 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file clean">○ README.md</div>
+                                            <div class="state-file clean">○ index.html</div>
+                                            <div class="state-file clean">○ style.css</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">◆ 커밋 3개</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git log --oneline</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">3</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">git log --oneline 으로 커밋 이력 확인</div>
+                                <p class="practice-step-desc">이론에서 배운 log 명령어로 커밋이 3개 쌓인 것을 눈으로 확인합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git log --oneline
+<span class="output">c3d9f1a style: 기본 CSS 추가   ← 가장 최신
+8b2e4d7 feat: 메인 페이지 추가
+a3f82bc docs: README 추가   ← 첫 커밋</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">4</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">.gitignore 만들고 실제로 무시되는지 확인</div>
+                                <p class="practice-step-desc">이론의 .gitignore 다이어그램과 동일합니다. 실제로 .env 파일을 만들고 무시되는지 확인합니다.
+                                </p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># .env 파일 생성 (비밀번호 종류라고 가정)</span>
+<span class="prompt">$</span> touch .env
+<span class="prompt">$</span> git status
+<span class="output">Untracked files:
+        .env   ← 아직은 Git이 보임</span>
+
+<span class="comment"># .gitignore 생성 후 .env 추가</span>
+<span class="prompt">$</span> touch .gitignore
+<span class="prompt">$</span> echo ".env" >> .gitignore
+
+<span class="prompt">$</span> git status
+<span class="output">Untracked files:
+        .gitignore   ← .env는 무시됨!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">.gitignore 적용 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file untracked">🔴 .gitignore (Untracked)</div>
+                                            <div class="state-empty" style="font-size:9px; margin-top:4px">🚧 .env → 무시!
+                                            </div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">◆ 이전 커밋 3개</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git add .gitignore &amp;&amp; git commit -m "chore:
+                                        .gitignore 추가"</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">5</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">INDEX.html 내용 수정 → 두 번째 커밋</div>
+                                <p class="practice-step-desc">이론의 STEP4(두 번째 커밋)! README에 프로젝트 설명을 넣고 Modified → add →
+                                    commit 흐름을 다시 한 번 연습합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> echo "# 나의 포트폴리오" > README.md
+<span class="prompt">$</span> git status
+<span class="output">modified:   README.md   ← Modified!</span>
+
+<span class="prompt">$</span> git add README.md
+<span class="prompt">$</span> git commit -m "docs: README에 프로젝트 제목 추가"
+
+<span class="prompt">$</span> git log --oneline
+<span class="output">매니저 docs: README에 프로젝트 제목 추가  ← HEAD
+f2e1b9c chore: .gitignore 추가
+c3d9f1a style: 기본 CSS 추가
+8b2e4d7 feat: 메인 페이지 추가
+a3f82bc docs: README 추가</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="scenarios-wrap">
+                            <div class="scenarios-title">🧪 이런 상황, 어떻게 할까요?</div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😰</span><span
+                                        class="scenario-question"><code>git commit</code> 했는데 "Please tell me who you
+                                        are" 오류가 나요</span><span class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">Git에 user.name과 user.email이 설정되지 않았습니다.</p>
+                                    <p class="scenario-fix"><code>git config --global user.name "이름"</code>과
+                                        <code>git config --global user.email "이메일"</code>을 먼저 실행하세요 (Ch.02 세팅 내용).
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😕</span><span
+                                        class="scenario-question">커밋 메시지에 오타냈어요!</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">바로 직전 커밋의 메시지만 수정할 수 있습니다.</p>
+                                    <p class="scenario-fix"><code>git commit --amend -m "수정된 메시지"</code>를 실행하세요. GitHub에
+                                        push하기 전에만 해야 합니다!</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😱</span><span
+                                        class="scenario-question">.gitignore에 추가했는데 파일이 여전히 보여요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">파일을 이미 <code>git add</code>한 적이 있다면 Git이 계속 추적합니다.</p>
+                                    <p class="scenario-fix"><code>git rm --cached 파일명</code>으로 해당 파일을 Git 추적에서 제외한 뒤
+                                        .gitignore에 추가하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">💡</span><span
+                                        class="scenario-question"><code>git add .</code> vs <code>git add 파일명</code> 언제
+                                        쓰나요?</span><span class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">두 명령어의 차이를 모으는 질문입니다.</p>
+                                    <p class="scenario-fix"><code>git add .</code>은 모든 변경 파일을 한 번에 add,
+                                        <code>git add 파일명</code>은 특정 파일만 add합니다. 관련 파일끼리 따로 커밋할 때는 파일명을 지정하세요.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practice-complete-banner">🎉 모든 Step 완료! 커밋 콘벤션과 .gitignore를 직접 만들었습니다.</div>
+                    </div>
+                </div>
+
                 <div class="chapter-nav">
                     <a href="03-git-flow.html" class="nav-btn">← Ch.03 Git 내부 구조</a>
-                    <a href="05-log-head.html" class="nav-btn next">Ch.05 HEAD & 히스토리 →</a>
+                    <a href="05-log-head.html" class="nav-btn next">Ch.05 HEAD &amp; 히스토리 →</a>
                 </div>
             </article>
         </div>
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/practice.js"></script>
 </body>
 
 </html>

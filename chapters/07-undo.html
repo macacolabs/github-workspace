@@ -47,9 +47,11 @@
                 <div class="sidebar-section-title">Part 3 — GitHub</div>
                 <ul class="sidebar-nav">
                     <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                     <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                 </ul>
             </div>
             <div class="sidebar-progress">
@@ -100,14 +102,16 @@
                                 <div style="font-size: 11px; font-weight: 700; color: var(--accent); min-width: 120px;">
                                     파일 수정취소<br>(add 전)</div>
                                 <div style="font-size: 12px; color: var(--text-secondary);">→
-                                    <code>git restore 파일명</code></div>
+                                    <code>git restore 파일명</code>
+                                </div>
                             </div>
                             <div
                                 style="display: flex; align-items: flex-start; gap: 12px; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--yellow);">
                                 <div style="font-size: 11px; font-weight: 700; color: var(--yellow); min-width: 120px;">
                                     add 취소<br>(staged 해제)</div>
                                 <div style="font-size: 12px; color: var(--text-secondary);">→
-                                    <code>git restore --staged 파일명</code></div>
+                                    <code>git restore --staged 파일명</code>
+                                </div>
                             </div>
                             <div
                                 style="display: flex; align-items: flex-start; gap: 12px; background: var(--bg-secondary); border-radius: 8px; padding: 12px; border-left: 3px solid var(--orange, #f0883e);">
@@ -376,14 +380,239 @@ stash@{1}: WIP on main: 9bc3d2a 이전 작업</span>
                     </div>
                 </div>
 
+                <!-- 실습 섹션 -->
+                <div class="practice-section">
+                    <div class="practice-header">
+                        <div class="practice-badge">🔨 실습 해보기</div>
+                        <div class="practice-title">실수 되돌리기 5가지 실제로 써보기</div>
+                        <p class="practice-desc">이론의 상황별 선택 가이드를 따라, restore / --staged / reset / revert / stash를 직접
+                            만들어보는 실수 상황에 해보세요.</p>
+                        <div class="mission-progress">
+                            <div class="mission-progress-bar">
+                                <div class="mission-progress-fill"></div>
+                            </div>
+                            <span class="mission-progress-label">0 / 6 완료</span>
+                        </div>
+                    </div>
+                    <div class="practice-body">
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">A</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">파일 잡못 수정 후 원래대로 되돌리기 (add 전)</div>
+                                <p class="practice-step-desc">이론의 "파일 수정취소(add 전)" 위치. 수정한 파일을 마지막 커밋 상태로 되돌립니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># 설정: 파일 하나 수정</span>
+<span class="prompt">$</span> echo "잠못수정" >> index.html
+<span class="prompt">$</span> git status
+<span class="output">modified: index.html</span>
+
+<span class="comment"># git restore로 되돌리기</span>
+<span class="prompt">$</span> git restore index.html
+<span class="prompt">$</span> git status
+<span class="output">nothing to commit, working tree clean  ← 원래대로!</span></code></pre>
+                                </div>
+                                <div class="alert danger" style="margin-top:8px">
+                                    <span class="alert-icon">🚨</span>
+                                    <p><code>git restore</code>는 Working Directory 변경사항을 삭제하며 <strong>복구가
+                                            불가능</strong>합니다. 실습할 때 쿄내지 않은 파일에 민하세요.</p>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">B</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">git add 했다가 되돌리기 (--staged)</div>
+                                <p class="practice-step-desc">이론의 "add 취소(staged 해제)" 위치. Staging Area에서만 꺼낼 수 있습니다. 파일
+                                    내용은 그대로입니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> echo "수정" >> index.html
+<span class="prompt">$</span> git add index.html
+<span class="prompt">$</span> git status
+<span class="output">Changes to be committed: index.html  ← Staging에 있음</span>
+
+<span class="prompt">$</span> git restore --staged index.html
+<span class="prompt">$</span> git status
+<span class="output">Changes not staged for commit: index.html  ← 파일은 유지, 비스페이지만</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">--staged 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file modified">🟠 index.html (Modified)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">restore --staged</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">◆ 이전 커밋</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">C</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">커밋 취소 — reset --soft (가장 안전)</div>
+                                <p class="practice-step-desc">이론의 "--soft: 커밋만 취소, 스테이징 유지". 커밋을 하나 쨨다가 스테이징에 넣어둘 때 쌤니다.
+                                </p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># 커밋 하나 만들고</span>
+<span class="prompt">$</span> git add . && git commit -m "fix: 잡못된 커밋"
+
+<span class="comment"># --soft로 취소 (파일 + 스테이징 모두 유지)</span>
+<span class="prompt">$</span> git reset --soft HEAD~1
+<span class="prompt">$</span> git status
+<span class="output">Changes to be committed:  ← 스테이징에 네워짐!</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">D</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">push 후 취소 — revert (git 히스토리 보존)</div>
+                                <p class="practice-step-desc">이론의 "push 후에는 reset 금지, revert 사용". 새 커밋으로 취소합니다 (히스토리
+                                    보존).</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># 취소할 커밋을 만들고</span>
+<span class="prompt">$</span> git add . && git commit -m "feat: 잘못된 기능 추가"
+
+<span class="comment"># revert로 한 단계 앞 커밋 취소 (새 커밋 생성)</span>
+<span class="prompt">$</span> git revert HEAD
+<span class="output">[main 3e8d1f0] Revert "feat: 잘못된 기능 추가"
+1 file changed, 1 deletion(-)</span>
+
+<span class="prompt">$</span> git log --oneline
+<span class="output">3e8d1f0 Revert "feat: 잘못된 기능 추가"  ← 취소 커밋 추가됨!
+b7d9e1f feat: 잘못된 기능 추가
+a3f82bc feat: 최신 커밋</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">E</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">작업 중 급한 브랜치 이동 시나리오 — stash</div>
+                                <p class="practice-step-desc">이론의 "stash 동작 방식 다이어그램". 작업 중인데 다른 브랜치로 이동해야 하는 상황입니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># 작업 중인 상태</span>
+<span class="prompt">$</span> echo "미완성 작업" >> index.html
+<span class="prompt">$</span> git status
+<span class="output">modified: index.html  ← 커밋하기 애매한 중간 상태</span>
+
+<span class="comment"># stash로 임시 보관</span>
+<span class="prompt">$</span> git stash
+<span class="output">Saved working directory and index state WIP on main</span>
+
+<span class="comment"># 다른 브랜치로 이동 (WD 간당)</span>
+<span class="prompt">$</span> git switch feature/urgent-fix
+
+<span class="comment"># 작업 후 main으로 돌아와서 복원</span>
+<span class="prompt">$</span> git switch main
+<span class="prompt">$</span> git stash pop
+<span class="output">On branch main
+Changes not staged for commit:
+        modified:   index.html  ← 복원됨!</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">F</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">reflog으로 --hard reset 후 복구</div>
+                                <p class="practice-step-desc">이론 외 팔맍 팅! --hard reset 후 "삭제했는데"라면 reflog로 해시를 찾아 복구할 수
+                                    있습니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># reflog: Git의 모든 작업 이력</span>
+<span class="prompt">$</span> git reflog
+<span class="output">a3f82bc HEAD@{0}: reset: moving to HEAD~1
+b7d9e1f HEAD@{1}: commit: feat: 업데이트   ← 여기로 돌아가요!</span>
+
+<span class="comment"># 해시를 직접 지정해 이동</span>
+<span class="prompt">$</span> git reset --hard b7d9e1f</code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="scenarios-wrap">
+                            <div class="scenarios-title">🧪 이런 상황, 어떻게 할까요?</div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😰</span><span
+                                        class="scenario-question"><code>git reset --hard</code> 후 "안
+                                        되는데!"라면?</span><span class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">--hard는 WD 변경사항도 지우지만, reflog에 커밋이 남아있습니다.</p>
+                                    <p class="scenario-fix"><code>git reflog</code>으로 해시를 찾고
+                                        <code>git reset --hard 해시</code>로 복구하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😕</span><span
+                                        class="scenario-question">push 후 reset했더니 팁원이 오류가 나요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">팀원 저장소와 히스토리가 달라지면 push가 거부됩니다.</p>
+                                    <p class="scenario-fix">push 후에는 reset 대신 <code>git revert</code>를 사용하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😱</span><span
+                                        class="scenario-question">stash한 걸 잊고 다른 브랜치에서 pop했어요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">stash는 브랜치에 얽매이지 않아 어떤 브랜치에서든 pop할 수 있습니다.</p>
+                                    <p class="scenario-fix"><code>git stash list</code>로 목록을 확인하고, 필요한 것만
+                                        <code>git stash apply stash@{N}</code>으로 적용하세요.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practice-complete-banner">🎉 모든 Step 완료! 실수 되돌리기 5가지를 직접 해보았습니다.</div>
+                    </div>
+                </div>
+
                 <div class="chapter-nav">
-                    <a href="06-branch-merge.html" class="nav-btn">← Ch.06 브랜치 & Merge</a>
+                    <a href="06-branch-merge.html" class="nav-btn">← Ch.06 브랜치 &amp; Merge</a>
                     <a href="08-github-remote.html" class="nav-btn next">Ch.08 GitHub 원격 저장소 →</a>
                 </div>
             </article>
         </div>
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/practice.js"></script>
 </body>
 
 </html>

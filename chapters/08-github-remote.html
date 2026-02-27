@@ -47,9 +47,11 @@
                 <div class="sidebar-section-title">Part 3 — GitHub</div>
                 <ul class="sidebar-nav">
                     <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                     <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                 </ul>
             </div>
             <div class="sidebar-progress">
@@ -352,6 +354,194 @@ Resolving deltas: done.</span>
                     </div>
                 </div>
 
+                <!-- 실습 섹션 -->
+                <div class="practice-section">
+                    <div class="practice-header">
+                        <div class="practice-badge">🔨 실습 해보기</div>
+                        <div class="practice-title">GitHub에 내 코드 올리고 팀원과 동기화하기</div>
+                        <p class="practice-desc">이론의 로컬 ↔ GitHub 다이어그램을 따라, 실제 GitHub 저장소를 만들고 push → pull 전체 흐름을 직접
+                            해보세요.</p>
+                        <div class="mission-progress">
+                            <div class="mission-progress-bar">
+                                <div class="mission-progress-fill"></div>
+                            </div>
+                            <span class="mission-progress-label">0 / 5 완료</span>
+                        </div>
+                    </div>
+                    <div class="practice-body">
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">1</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">GitHub에 새 Repository 생성</div>
+                                <p class="practice-step-desc">이론의 STP 1처럼 실제 GitHub를 열고 그대로 따라하세요. README 없이 생성해야 충돌이
+                                    없습니다.</p>
+                                <div class="alert tip" style="margin-top:8px">
+                                    <span class="alert-icon">💻</span>
+                                    <p>GitHub.com → New repository → 이름 입력 → <strong>README 체크 해제</strong> → Create
+                                        repository</p>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">2</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">로컬과 원격 저장소 연결 (git remote add)</div>
+                                <p class="practice-step-desc">이론의 "2단계: origin이라는 이름으로 연결". <code>git remote -v</code>로
+                                    연결 확인합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git remote add origin https://github.com/사용자명/my-first-git.git
+<span class="prompt">$</span> git remote -v
+<span class="output">origin  https://github.com/.../my-first-git.git (fetch)
+origin  https://github.com/.../my-first-git.git (push)  ← 연결 성공!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">연결 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd" style="flex:2">
+                                            <div class="state-area-name state-area-name-wd">로컬 저장소</div>
+                                            <div class="state-file committed">◆ 커밋 이력 있음</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git remote add</div>
+                                        </div>
+                                        <div class="state-area state-area-lr" style="flex:2">
+                                            <div class="state-area-name state-area-name-lr">GitHub (origin)</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git push -u origin main</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">3</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">첫 push — 로컬 커밋을 GitHub에 업로드</div>
+                                <p class="practice-step-desc">이론의 "git push 화살표"! -u는 upstream 설정으로 이후부터는
+                                    <code>git push</code>만 해도 됩니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git push -u origin main
+<span class="output">Branch 'main' set up to track remote branch 'main' from 'origin'.
+To https://github.com/.../my-first-git.git
+   * [new branch]      main -&gt; main  ← GitHub에 나타남!</span>
+
+<span class="comment"># 이후 커밋하면</span>
+<span class="prompt">$</span> echo "수정" &gt;&gt; index.html
+<span class="prompt">$</span> git add . &amp;&amp; git commit -m "fix: 내용 수정"
+<span class="prompt">$</span> git push  <span class="comment"># -u origin main 없이도 됨!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">push 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd" style="flex:2">
+                                            <div class="state-area-name state-area-name-wd">로컬</div>
+                                            <div class="state-file committed">◆ main: a1b2c3</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git push →</div>
+                                        </div>
+                                        <div class="state-area state-area-lr" style="flex:2">
+                                            <div class="state-area-name state-area-name-lr">GitHub (origin/main)</div>
+                                            <div class="state-file committed">◆ a1b2c3 업로드됨!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">4</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">GitHub에서 직접 파일 수정 → pull로 동기화</div>
+                                <p class="practice-step-desc">팀원이 수정한 상황 시뮬레이션! GitHub에서 직접 파일을 수정하고
+                                    <code>git pull</code>로 내려받습니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># GitHub 웹사이트에서 README.md 직접 편집 후</span>
+<span class="comment"># 로컬에서 pull</span>
+<span class="prompt">$</span> git pull
+<span class="output">remote: Enumerating objects: 5, done.
+...
+Updating a1b2c3..d4e5f6
+Fast-forward
+ README.md | 2 ++
+ 1 file changed  ← 내려왔어요!</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">5</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">clone — 다른 폴더에 저장소 복사</div>
+                                <p class="practice-step-desc">이론의 "git clone". GitHub URL로 저장소를 통째로 복사하면 remote add 없이
+                                    자동으로 연결됩니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="comment"># 다른 위치에 clone</span>
+<span class="prompt">$</span> git clone https://github.com/사용자명/my-first-git.git cloned-project
+<span class="output">Cloning into 'cloned-project'...
+remote: Enumerating objects...
+Done.  ← 자동으로 origin 연결!</span>
+
+<span class="prompt">$</span> cd cloned-project
+<span class="prompt">$</span> git remote -v
+<span class="output">origin  https://github.com/.../my-first-git.git (fetch)</span></code></pre>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="scenarios-wrap">
+                            <div class="scenarios-title">🧪 이런 상황, 어떻게 할까요?</div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😰</span><span
+                                        class="scenario-question">push했는데 "rejected" 오류가 나요!</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">원격에 로컬에 없는 커밋이 있기 때문입니다.</p>
+                                    <p class="scenario-fix">먼저 <code>git pull</code>로 원격 커밋을 받은 후 다시 push하세요. 충돌 났다면 해결
+                                        후 push합니다.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😕</span><span
+                                        class="scenario-question"><code>git push</code> 했는데 인증요청이 나와요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">GitHub 비밀번호 방식은 이제 지원하지 않습니다.</p>
+                                    <p class="scenario-fix">GitHub 설정 → Developer Settings → Personal Access Token을 생성해
+                                        비밀번호 자리에 입력하세요. 또는 SSH 키를 설정하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😱</span><span
+                                        class="scenario-question">pull 했는데 충돌이 납니다!</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">로컬와 원격이 같은 파일을 다르게 수정한 경우입니다.</p>
+                                    <p class="scenario-fix">Ch.06의 충돌 해결과 동일합니다. 충돌 파일을 수정하고 add + commit하면 됩니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practice-complete-banner">🎉 모든 Step 완료! GitHub와 로컬이 실제로 연결되었습니다.</div>
+                    </div>
+                </div>
+
                 <div class="chapter-nav">
                     <a href="07-undo.html" class="nav-btn">← Ch.07 실수 되돌리기</a>
                     <a href="09-pull-request.html" class="nav-btn next">Ch.09 Pull Request →</a>
@@ -360,6 +550,7 @@ Resolving deltas: done.</span>
         </div>
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/practice.js"></script>
 </body>
 
 </html>

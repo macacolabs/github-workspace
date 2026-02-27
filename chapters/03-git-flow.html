@@ -47,9 +47,11 @@
                 <div class="sidebar-section-title">Part 3 — GitHub</div>
                 <ul class="sidebar-nav">
                     <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                     <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
-                            <div class="nav-check"></div></a></li>
+                            <div class="nav-check"></div>
+                        </a></li>
                 </ul>
             </div>
             <div class="sidebar-progress">
@@ -402,6 +404,304 @@ Untracked files:               ← Git이 아직 모르는 새 파일
                     </div>
                 </div>
 
+                <!-- 실습 섹션 -->
+                <div class="practice-section">
+                    <div class="practice-header">
+                        <div class="practice-badge">🔨 실습 해보기</div>
+                        <div class="practice-title">3영역을 눈으로 확인하며 첫 버전 만들기</div>
+                        <p class="practice-desc">이론에서 배운 Working Directory → Staging Area → Repository 흐름을 직접 따라합니다. 매
+                            단계 <code>git status</code>로 변화를 확인하세요.</p>
+                        <div class="mission-progress">
+                            <div class="mission-progress-bar">
+                                <div class="mission-progress-fill"></div>
+                            </div>
+                            <span class="mission-progress-label">0 / 6 완료</span>
+                        </div>
+                    </div>
+                    <div class="practice-body">
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">1</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">실습 폴더 만들고 git init</div>
+                                <p class="practice-step-desc">빈 폴더를 만들고 Git 저장소로 초기화합니다. <code>.git</code> 폴더(= Local
+                                    Repository)가 생성됩니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> mkdir git-practice &amp;&amp; cd git-practice
+<span class="prompt">$</span> git init
+<span class="output">Initialized empty Git repository in .../git-practice/.git/</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 1 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">.git 생성!</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">touch index.html</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">2</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">파일 생성 → Untracked 상태 확인</div>
+                                <p class="practice-step-desc">새 파일을 만들면 Git이 <strong>Untracked</strong>로 인식합니다. 이론의 "추적
+                                    안 됨" 상태를 눈으로 확인하세요.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> touch index.html
+<span class="prompt">$</span> git status
+<span class="output">Untracked files:
+        index.html   ← Git이 아직 모르는 상태!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 2 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file untracked">🔴 index.html (Untracked)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git add index.html</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">3</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">git add → Staged 상태 확인</div>
+                                <p class="practice-step-desc"><code>git add</code>로 Staging Area(커밋 대기실)로 이동합니다. status의
+                                    "Changes to be committed"가 이 영역입니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git add index.html
+<span class="prompt">$</span> git status
+<span class="output">Changes to be committed:
+        new file:   index.html  ← Staging Area에 있음!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 3 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file clean">○ index.html</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add ✅</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-file staged">🟡 index.html (Staged)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git commit -m "feat: index.html 추가"</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">4</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">git commit → Repository에 버전 저장</div>
+                                <p class="practice-step-desc">커밋하면 Staging Area가 비워지고 Repository에 버전이 생깁니다. "nothing to
+                                    commit"이 건강한 상태입니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> git commit -m "feat: index.html 추가"
+<span class="output">[main (root-commit) a3f82bc] feat: index.html 추가</span>
+<span class="prompt">$</span> git status
+<span class="output">nothing to commit, working tree clean</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 4 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file clean">○ index.html</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit ✅</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">◆ a3f82bc</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">5</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">파일 수정 → Modified 상태 확인</div>
+                                <p class="practice-step-desc">커밋된 파일을 수정하면 <strong>Modified</strong> 상태가 됩니다. 다시 add →
+                                    commit 해야 새 버전이 생깁니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> echo "&lt;h1&gt;Hello Git&lt;/h1&gt;" &gt; index.html
+<span class="prompt">$</span> git status
+<span class="output">Changes not staged for commit:
+        modified:   index.html   ← Modified!</span></code></pre>
+                                </div>
+                                <div class="state-panel">
+                                    <div class="state-panel-title">Step 5 완료 후 상태</div>
+                                    <div class="state-areas">
+                                        <div class="state-area state-area-wd">
+                                            <div class="state-area-name state-area-name-wd">Working Dir</div>
+                                            <div class="state-file modified">🟠 index.html (Modified)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git add</div>
+                                        </div>
+                                        <div class="state-area state-area-sa">
+                                            <div class="state-area-name state-area-name-sa">Staging Area</div>
+                                            <div class="state-empty">(비어있음)</div>
+                                        </div>
+                                        <div class="state-arrow">
+                                            <div class="state-arrow-cmd">git commit</div>
+                                        </div>
+                                        <div class="state-area state-area-lr">
+                                            <div class="state-area-name state-area-name-lr">Repository</div>
+                                            <div class="state-file committed">◆ v1</div>
+                                        </div>
+                                    </div>
+                                    <div class="state-next-hint">git add index.html &amp;&amp; git commit</div>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="practice-step">
+                            <div class="practice-step-num">6</div>
+                            <div class="practice-step-content">
+                                <div class="practice-step-title">Staging Area 활용 — 파일 2개를 따로따로 커밋</div>
+                                <p class="practice-step-desc">Staging Area의 진짜 쓰임! 파일 2개를 만들고 관련 있는 것끼리 따로 커밋합니다.</p>
+                                <div class="code-block terminal">
+                                    <div class="code-block-header"><span class="code-lang">Git Bash</span><button
+                                            class="copy-btn">복사</button></div>
+                                    <pre><code><span class="prompt">$</span> touch login.html signup.html
+<span class="prompt">$</span> git add login.html
+<span class="prompt">$</span> git commit -m "feat: 로그인 페이지 추가"
+<span class="prompt">$</span> git add signup.html
+<span class="prompt">$</span> git commit -m "feat: 회원가입 페이지 추가"
+<span class="prompt">$</span> git log --oneline
+<span class="output">c3d2e1f feat: 회원가입 페이지 추가
+b7a9f3c feat: 로그인 페이지 추가
+a3f82bc feat: index.html 추가</span></code></pre>
+                                </div>
+                                <div class="alert success" style="margin-top:8px">
+                                    <span class="alert-icon">🎯</span>
+                                    <p>Staging Area 덕분에 수정 파일이 많아도 관련 파일끼리 묶어 의미 있는 커밋을 만들 수 있습니다!</p>
+                                </div>
+                            </div>
+                            <button class="step-check-btn">⬜ 완료</button>
+                        </div>
+
+                        <div class="scenarios-wrap">
+                            <div class="scenarios-title">🧪 이런 상황, 어떻게 할까요?</div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😰</span><span
+                                        class="scenario-question"><code>git status</code>를 했는데 "not a git repository"
+                                        오류가 나요</span><span class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">현재 폴더에서 <code>git init</code>을 아직 실행하지 않았습니다.</p>
+                                    <p class="scenario-fix"><code>git init</code>을 먼저 실행하세요. <code>pwd</code>로 위치를 확인 후
+                                        올바른 폴더에서 실행하세요.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😕</span><span
+                                        class="scenario-question">파일 만들었는데 <code>git status</code>에 아무것도 안
+                                        보여요</span><span class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">Git 저장소 밖에 파일을 만들었거나 다른 폴더에 있을 수 있습니다.</p>
+                                    <p class="scenario-fix"><code>pwd</code>와 <code>ls</code>로 위치와 파일을 확인하세요. Git 저장소 폴더
+                                        안에 파일이 있어야 합니다.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">😱</span><span
+                                        class="scenario-question"><code>git add .</code> 했는데 특정 파일만 빼고 싶어요</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause">add 이후에도 Staging Area에서 꺼낼 수 있습니다.</p>
+                                    <p class="scenario-fix"><code>git restore --staged 파일명</code>으로 해당 파일만 빼낼 수 있습니다. 파일
+                                        내용은 그대로입니다.</p>
+                                </div>
+                            </div>
+                            <div class="scenario-card">
+                                <div class="scenario-header"><span class="scenario-icon">💀</span><span
+                                        class="scenario-question"><code>.git</code> 폴더를 실수로 삭제했어요!</span><span
+                                        class="scenario-toggle-icon">▶</span></div>
+                                <div class="scenario-body">
+                                    <p class="scenario-cause"><code>.git</code> 폴더가 삭제되면 모든 커밋 이력이 사라집니다.</p>
+                                    <p class="scenario-fix">GitHub에 push해둔 게 있다면 <code>git clone</code>으로 복구 가능합니다. 평소
+                                        자주 push하는 습관이 중요합니다!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="practice-complete-banner">🎉 모든 Step 완료! 3영역 흐름을 직접 손으로 확인했습니다.</div>
+                    </div>
+                </div>
+
                 <div class="chapter-nav">
                     <a href="02-setup.html" class="nav-btn">← Ch.02 환경 세팅</a>
                     <a href="04-first-commit.html" class="nav-btn next">Ch.04 첫 번째 커밋 →</a>
@@ -410,6 +710,7 @@ Untracked files:               ← Git이 아직 모르는 새 파일
         </div>
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/practice.js"></script>
 </body>
 
 </html>
