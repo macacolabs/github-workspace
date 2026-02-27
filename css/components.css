@@ -1,0 +1,460 @@
+/* ===================================================
+   Git Lecture Web - Additional Component Styles
+   chapters, diagrams, index-no-sidebar layout
+   =================================================== */
+
+/* ── 인덱스 전용 (사이드바 없는 레이아웃) ── */
+.no-sidebar .main-content {
+    margin-left: 0;
+}
+
+.top-bar {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.top-bar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.top-bar-logo .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.top-bar-logo span {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-bar-stat {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.top-bar-btn {
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    background: var(--accent-dim);
+    border: 1px solid rgba(88, 166, 255, .3);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition);
+}
+
+.top-bar-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ── 전체 진행률 표시 ── */
+.overall-progress {
+    padding: 20px 48px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.op-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.op-bar {
+    background: var(--bg-hover);
+    border-radius: 6px;
+    height: 6px;
+}
+
+.op-fill {
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+}
+
+/* ── 시각화 박스: 내부 상태 ── */
+.viz-box {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.viz-box-header {
+    background: var(--bg-card);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.viz-body {
+    padding: 20px;
+}
+
+/* 파일 상태 시각화 */
+.file-transition-demo {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
+    align-items: center;
+}
+
+.fz-zone {
+    padding: 16px;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.fz-wd {
+    background: var(--accent-dim);
+    border: 1.5px dashed var(--wd-color);
+}
+
+.fz-sa {
+    background: var(--yellow-dim);
+    border: 1.5px dashed var(--sa-color);
+}
+
+.fz-lr {
+    background: var(--green-dim);
+    border: 1.5px dashed var(--lr-color);
+}
+
+.fz-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fz-wd .fz-title {
+    color: var(--wd-color);
+}
+
+.fz-sa .fz-title {
+    color: var(--sa-color);
+}
+
+.fz-lr .fz-title {
+    color: var(--lr-color);
+}
+
+.fz-file-item {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-family: var(--font-code);
+    margin: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--border);
+}
+
+.fz-arrow {
+    text-align: center;
+    padding: 0 4px;
+}
+
+.fz-arrow .cmd {
+    font-size: 10px;
+    font-family: var(--font-code);
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.fz-arrow .arr {
+    font-size: 16px;
+    color: var(--text-muted);
+}
+
+/* HEAD 다이어그램 */
+.head-diagram {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.head-commits {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.head-commit-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    position: relative;
+}
+
+.head-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 2px solid var(--text-muted);
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.head-dot.current {
+    border-color: var(--yellow);
+    background: var(--yellow);
+}
+
+.head-commit-line {
+    position: absolute;
+    left: 6px;
+    top: 22px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--border);
+    z-index: 0;
+}
+
+.head-commit-info {
+    font-size: 13px;
+}
+
+.head-hash {
+    font-family: var(--font-code);
+    color: var(--yellow);
+    font-size: 11px;
+}
+
+.head-msg {
+    color: var(--text-secondary);
+    margin-left: 8px;
+}
+
+.head-pointer {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+}
+
+.head-tag {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--yellow-dim);
+    color: var(--yellow);
+    border: 1px solid var(--yellow);
+}
+
+.main-tag {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.branch-tag {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid var(--green);
+}
+
+/* 충돌 시각화 */
+.conflict-box {
+    background: var(--red-dim);
+    border: 1.5px solid var(--red);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 12px 0;
+    font-family: var(--font-code);
+    font-size: 13px;
+}
+
+.conflict-line-a {
+    color: var(--accent);
+}
+
+.conflict-line-b {
+    color: var(--green);
+}
+
+.conflict-line-sep {
+    color: var(--text-muted);
+}
+
+.conflict-line-ok {
+    color: var(--text-primary);
+}
+
+/* SSH / 인증 다이어그램 */
+.auth-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+}
+
+.auth-node {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+}
+
+.auth-node-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.auth-node-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.auth-node-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.auth-arrow {
+    color: var(--text-muted);
+    font-size: 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.auth-arrow-label {
+    font-size: 10px;
+    font-family: var(--font-code);
+    color: var(--accent);
+}
+
+/* 원격 흐름 다이어그램 */
+.remote-flow {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.rf-box {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+}
+
+.rf-box.local {
+    border-color: var(--lr-color);
+}
+
+.rf-box.remote {
+    border-color: var(--rr-color);
+}
+
+.rf-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.rf-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.rf-local-title {
+    color: var(--lr-color);
+}
+
+.rf-remote-title {
+    color: var(--rr-color);
+}
+
+.rf-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.rf-arrows {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.rf-arrow-item {
+    text-align: center;
+}
+
+.rf-arrow-cmd {
+    font-size: 10px;
+    font-family: var(--font-code);
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.rf-arrow-sym {
+    font-size: 18px;
+    color: var(--text-muted);
+}

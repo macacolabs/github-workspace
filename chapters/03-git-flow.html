@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch.03 Git 내부 구조 | Git & GitHub 완전 정복</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="logo-text">Git & GitHub</div>
+                    <div class="logo-sub">완전 정복 과정</div>
+                </div>
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 1 — Git 기초</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-git-intro.html" data-chapter="01"><span class="nav-num">01</span> Git이란?<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="02-setup.html" data-chapter="02"><span class="nav-num">02</span> 환경 세팅<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="03-git-flow.html" data-chapter="03"><span class="nav-num">03</span> Git 내부 구조<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="04-first-commit.html" data-chapter="04"><span class="nav-num">04</span> 첫 번째 커밋<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="05-log-head.html" data-chapter="05"><span class="nav-num">05</span> HEAD & 히스토리<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 2 — 브랜치</div>
+                <ul class="sidebar-nav">
+                    <li><a href="06-branch-merge.html" data-chapter="06"><span class="nav-num">06</span> 브랜치 & Merge<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="07-undo.html" data-chapter="07"><span class="nav-num">07</span> 실수 되돌리기<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 3 — GitHub</div>
+                <ul class="sidebar-nav">
+                    <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
+                            <div class="nav-check"></div></a></li>
+                    <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
+                            <div class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-progress">
+                <div class="progress-label"><span>전체 진행률</span><span>0/9 완료</span></div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width:0%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="chapter-header">
+                <div class="chapter-header-left">
+                    <button class="menu-toggle">☰</button>
+                    <span class="chapter-part-badge part-1">Part 1</span>
+                    <span class="chapter-progress-text">0 / 9 챕터 완료</span>
+                </div>
+                <button class="btn-complete" data-chapter="03">⬜ 완료 체크</button>
+            </header>
+
+            <article class="chapter-content">
+                <div class="chapter-title-wrap">
+                    <div class="chapter-num">Chapter 03 · 약 60분</div>
+                    <h1 class="chapter-title">Git 내부 구조 이해</h1>
+                    <p class="chapter-desc">Git이 파일을 어떻게 관리하는지, 3개의 영역을 통해 완전히 이해합니다. 이것을 이해하면 나머지 모든 게 쉬워집니다.</p>
+                </div>
+
+                <div class="learning-goals">
+                    <div class="learning-goals-title">🎯 이 챕터를 마치면</div>
+                    <ul>
+                        <li>Working Directory, Staging Area, Repository 3영역을 설명할 수 있다</li>
+                        <li>파일이 각 영역을 어떻게 이동하는지 이해한다</li>
+                        <li>Untracked, Modified, Staged, Committed 상태를 구분할 수 있다</li>
+                        <li><code>git status</code>로 현재 상태를 파악할 수 있다</li>
+                    </ul>
+                </div>
+
+                <!-- 핵심 다이어그램 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🏗️</span> 1. Git의 3가지 영역</h2>
+
+                    <p>Git은 파일을 <strong>3개의 영역</strong>으로 나누어 관리합니다. 이 3개의 영역을 이해하는 것이 Git의 핵심입니다.</p>
+
+                    <!-- 메인 3영역 다이어그램 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Git의 3영역과 명령어 흐름</div>
+                        <div class="git-areas">
+                            <div class="git-area git-area-wd">
+                                <div class="git-area-icon">📁</div>
+                                <div class="git-area-name git-area-name-wd">Working Directory</div>
+                                <div class="git-area-sub">작업 공간</div>
+                                <div class="git-area-files">
+                                    <div class="git-file new">● index.html <span
+                                            style="margin-left:auto; color: var(--green); font-size:9px;">NEW</span>
+                                    </div>
+                                    <div class="git-file modified">● style.css <span
+                                            style="margin-left:auto; color: var(--yellow); font-size:9px;">MODIFIED</span>
+                                    </div>
+                                    <div class="git-file">○ app.js</div>
+                                </div>
+                            </div>
+                            <div class="git-arrow">
+                                <div class="git-arrow-cmd">git add</div>
+                                <div class="git-arrow-line"></div>
+                            </div>
+                            <div class="git-area git-area-sa">
+                                <div class="git-area-icon">📋</div>
+                                <div class="git-area-name git-area-name-sa">Staging Area</div>
+                                <div class="git-area-sub">커밋 대기실</div>
+                                <div class="git-area-files">
+                                    <div class="git-file staged">● index.html</div>
+                                    <div class="git-file staged">● style.css</div>
+                                </div>
+                            </div>
+                            <div class="git-arrow">
+                                <div class="git-arrow-cmd">git commit</div>
+                                <div class="git-arrow-line"></div>
+                            </div>
+                            <div class="git-area git-area-lr">
+                                <div class="git-area-icon">💾</div>
+                                <div class="git-area-name git-area-name-lr">Local Repository</div>
+                                <div class="git-area-sub">버전 저장소</div>
+                                <div class="git-area-files">
+                                    <div class="git-file committed">◆ Commit v3</div>
+                                    <div class="git-file committed">◆ Commit v2</div>
+                                    <div class="git-file committed">◆ Commit v1</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; text-align: center; font-size: 12px; color: var(--text-muted);">
+                            ↩ <code style="font-size: 11px;">git restore</code> 또는 <code
+                                style="font-size: 11px;">git checkout</code> 으로 되돌리기 가능
+                        </div>
+                    </div>
+
+                    <!-- 3영역 개별 설명 -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 20px;">
+                        <div
+                            style="background: var(--accent-dim); border: 1.5px solid var(--wd-color); border-radius: 10px; padding: 18px;">
+                            <div style="font-size: 20px; margin-bottom: 6px;">📁</div>
+                            <div style="font-size: 14px; font-weight: 700; color: var(--wd-color); margin-bottom: 6px;">
+                                Working Directory</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">실제로 파일을 편집하는 공간. 평소에 우리가 파일을 열고
+                                수정하는 그 폴더입니다.</div>
+                        </div>
+                        <div
+                            style="background: var(--yellow-dim); border: 1.5px solid var(--sa-color); border-radius: 10px; padding: 18px;">
+                            <div style="font-size: 20px; margin-bottom: 6px;">📋</div>
+                            <div style="font-size: 14px; font-weight: 700; color: var(--sa-color); margin-bottom: 6px;">
+                                Staging Area</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">다음 커밋에 포함할 파일을 선택해서 모아두는 공간. "커밋
+                                대기실"이라고 생각하세요.</div>
+                        </div>
+                        <div
+                            style="background: var(--green-dim); border: 1.5px solid var(--lr-color); border-radius: 10px; padding: 18px;">
+                            <div style="font-size: 20px; margin-bottom: 6px;">💾</div>
+                            <div style="font-size: 14px; font-weight: 700; color: var(--lr-color); margin-bottom: 6px;">
+                                Local Repository</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">커밋된 버전들이 영구적으로 저장되는 공간. 프로젝트 폴더
+                                안의 숨김 폴더 <code>.git</code>이 바로 이곳입니다.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. 파일 상태 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🔄</span> 2. 파일의 4가지 상태</h2>
+
+                    <p>Git에서 파일은 항상 아래 4가지 상태 중 하나에 있습니다.</p>
+
+                    <!-- 파일 상태 플로우 다이어그램 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">파일 상태 변화 흐름</div>
+                        <div style="display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                            <div style="text-align: center; flex: 1; min-width: 100px;">
+                                <div
+                                    style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-secondary); border: 2.5px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 20px; margin: 0 auto 8px;">
+                                    📄</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Untracked
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">추적 안 됨<br>(새
+                                    파일)</div>
+                            </div>
+                            <div
+                                style="display: flex; align-items: center; flex-direction: column; justify-content: center; color: var(--text-muted); font-size: 10px; flex-shrink: 0;">
+                                <span style="font-family: var(--font-code); color: var(--accent);">git add</span>
+                                <span style="font-size: 18px;">→</span>
+                            </div>
+                            <div style="text-align: center; flex: 1; min-width: 100px;">
+                                <div
+                                    style="width: 56px; height: 56px; border-radius: 50%; background: var(--yellow-dim); border: 2.5px solid var(--sa-color); display: flex; align-items: center; justify-content: center; font-size: 20px; margin: 0 auto 8px;">
+                                    📑</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--sa-color);">Staged</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">스테이징됨<br>(커밋
+                                    대기)</div>
+                            </div>
+                            <div
+                                style="display: flex; align-items: center; flex-direction: column; justify-content: center; color: var(--text-muted); font-size: 10px; flex-shrink: 0;">
+                                <span style="font-family: var(--font-code); color: var(--green);">git commit</span>
+                                <span style="font-size: 18px;">→</span>
+                            </div>
+                            <div style="text-align: center; flex: 1; min-width: 100px;">
+                                <div
+                                    style="width: 56px; height: 56px; border-radius: 50%; background: var(--green-dim); border: 2.5px solid var(--lr-color); display: flex; align-items: center; justify-content: center; font-size: 20px; margin: 0 auto 8px;">
+                                    ✅</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--lr-color);">Committed</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">커밋됨<br>(저장 완료)
+                                </div>
+                            </div>
+                            <div
+                                style="display: flex; align-items: center; flex-direction: column; justify-content: center; color: var(--text-muted); font-size: 10px; flex-shrink: 0;">
+                                <span style="font-family: var(--font-code); color: var(--yellow);">수정 후</span>
+                                <span style="font-size: 18px;">→</span>
+                            </div>
+                            <div style="text-align: center; flex: 1; min-width: 100px;">
+                                <div
+                                    style="width: 56px; height: 56px; border-radius: 50%; background: var(--yellow-dim); border: 2.5px solid var(--yellow); display: flex; align-items: center; justify-content: center; font-size: 20px; margin: 0 auto 8px;">
+                                    ✏️</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--yellow);">Modified</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">수정됨<br>(변경 감지)
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 12px; font-size: 11px; color: var(--text-muted);">
+                            Modified → <code style="font-size:10px;">git add</code> → Staged → <code
+                                style="font-size:10px;">git commit</code> → Committed (다시 반복)
+                        </div>
+                    </div>
+
+                    <!-- git status 명령어 -->
+                    <h3>git status 로 상태 확인하기</h3>
+                    <p><code>git status</code>는 현재 3영역의 파일 상태를 한눈에 보여주는 가장 중요한 명령어입니다.</p>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash — 실행 결과 예시</span></div>
+                        <pre><code><span class="prompt">$</span> git status
+<span class="output">On branch main
+
+Changes to be committed:       ← Staging Area에 있는 파일
+  (use "git restore --staged &lt;file&gt;" to unstage)
+        new file:   index.html
+        modified:   style.css
+
+Changes not staged for commit: ← Modified (수정됐지만 add 안 된 파일)
+  (use "git add &lt;file&gt;" to update what will be committed)
+        modified:   README.md
+
+Untracked files:               ← Git이 아직 모르는 새 파일
+  (use "git add &lt;file&gt;" to include in what will be committed)
+        app.js</span></code></pre>
+                    </div>
+
+                    <!-- 각 섹션 설명 -->
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+                        <div
+                            style="display: flex; gap: 12px; padding: 12px; background: var(--yellow-dim); border-radius: 8px; border-left: 3px solid var(--sa-color);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--sa-color); min-width: 160px;">
+                                Changes to be committed</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Staging Area에 있는 파일들. git
+                                commit하면 저장됩니다.</div>
+                        </div>
+                        <div
+                            style="display: flex; gap: 12px; padding: 12px; background: var(--orange-dim); border-radius: 8px; border-left: 3px solid var(--orange);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--orange); min-width: 160px;">
+                                Changes not staged</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">수정은 됐지만 git add를 안 한 파일들.
+                                Staging Area에 올려야 합니다.</div>
+                        </div>
+                        <div
+                            style="display: flex; gap: 12px; padding: 12px; background: var(--bg-card); border-radius: 8px; border-left: 3px solid var(--text-muted);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--text-muted); min-width: 160px;">
+                                Untracked files</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Git이 한 번도 추적한 적 없는 새 파일. git
+                                add로 추적 시작.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Staging Area가 왜 필요한가? -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">💡</span> 3. Staging Area가 왜 필요할까?</h2>
+
+                    <p>처음에는 의문이 듭니다. <em>"그냥 수정하고 바로 저장하면 안 되나요?"</em></p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Staging Area가 있는 이유 — 선택적 커밋</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
+                                <div
+                                    style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+                                    오늘 수정한 파일 목록</div>
+                                <div
+                                    style="background: var(--bg-secondary); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-family: var(--font-code);">
+                                    <div style="color: var(--yellow);">✏️ login.js — 로그인 버그 수정</div>
+                                    <div style="color: var(--yellow);">✏️ signup.js — 회원가입 버그 수정</div>
+                                    <div style="color: var(--green);">✏️ footer.html — 퍼블리싱 작업</div>
+                                    <div style="color: var(--green);">✏️ header.html — 퍼블리싱 작업</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+                                    Staging Area로 나눠서 커밋</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div
+                                        style="background: var(--yellow-dim); border: 1px solid var(--yellow); border-radius: 8px; padding: 10px; font-size: 12px;">
+                                        <div style="color: var(--yellow); font-weight: 700; margin-bottom: 4px;">Commit
+                                            1</div>
+                                        <div style="color: var(--text-secondary);">login.js + signup.js<br><span
+                                                style="font-family: var(--font-code);">"fix: 로그인/회원가입 버그 수정"</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="background: var(--green-dim); border: 1px solid var(--green); border-radius: 8px; padding: 10px; font-size: 12px;">
+                                        <div style="color: var(--green); font-weight: 700; margin-bottom: 4px;">Commit 2
+                                        </div>
+                                        <div style="color: var(--text-secondary);">footer.html + header.html<br><span
+                                                style="font-family: var(--font-code);">"feat: 헤더/푸터 퍼블리싱"</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted); text-align: center;">
+                            ✅ Staging Area 덕분에 관련 있는 변경사항끼리 묶어서 의미있는 커밋 단위를 만들 수 있다
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. .git 폴더 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">📦</span> 4. .git 폴더란?</h2>
+
+                    <p><code>git init</code>을 실행하면 프로젝트 폴더에 숨김 폴더 <code>.git</code>이 생성됩니다. 이 폴더가 바로 Local
+                        Repository입니다.</p>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash</span></div>
+                        <pre><code><span class="prompt">$</span> ls -al
+<span class="output">drwxr-xr-x  .git   ← 이 폴더가 저장소! 절대 삭제하지 마세요
+-rw-r--r--  index.html
+-rw-r--r--  style.css</span></code></pre>
+                    </div>
+
+                    <div class="alert danger">
+                        <span class="alert-icon">🚨</span>
+                        <p><strong>.git 폴더를 절대 삭제하지 마세요!</strong> 삭제하면 모든 커밋 이력이 사라집니다. 이 폴더가 Git 저장소의 전부입니다.</p>
+                    </div>
+                </section>
+
+                <!-- 체크리스트 -->
+                <div class="quiz-section">
+                    <div class="quiz-title">✅ 이해도 체크</div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Working Directory, Staging Area, Repository 3영역의 역할을 각각 설명할 수 있다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">파일이 Untracked → Staged → Committed로 이동하려면 어떤 명령어가 필요한지 안다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text"><code>git status</code> 출력에서 "Changes to be committed"가 어느 영역인지 알 수 있다
+                        </div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Staging Area가 왜 필요한지 설명할 수 있다</div>
+                    </div>
+                </div>
+
+                <div class="cheatsheet" style="margin-top: 24px;">
+                    <div class="cheatsheet-header">📌 이 챕터 핵심 명령어</div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">git status</code>
+                        <div class="cheat-desc">현재 3영역의 파일 상태 확인 (가장 자주 씀!)</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">git add 파일명</code>
+                        <div class="cheat-desc">Working Dir → Staging Area로 파일 이동</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">git add .</code>
+                        <div class="cheat-desc">모든 변경 파일을 Staging Area로 이동</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">git restore --staged 파일명</code>
+                        <div class="cheat-desc">Staging Area에서 되돌리기 (unstaing)</div>
+                    </div>
+                </div>
+
+                <div class="chapter-nav">
+                    <a href="02-setup.html" class="nav-btn">← Ch.02 환경 세팅</a>
+                    <a href="04-first-commit.html" class="nav-btn next">Ch.04 첫 번째 커밋 →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

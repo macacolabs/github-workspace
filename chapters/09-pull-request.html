@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch.09 Pull Request & 팀 협업 | Git & GitHub 완전 정복</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="logo-text">Git & GitHub</div>
+                    <div class="logo-sub">완전 정복 과정</div>
+                </div>
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 1 — Git 기초</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-git-intro.html" data-chapter="01"><span class="nav-num">01</span> Git이란?<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="02-setup.html" data-chapter="02"><span class="nav-num">02</span> 환경 세팅<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="03-git-flow.html" data-chapter="03"><span class="nav-num">03</span> Git 내부 구조<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="04-first-commit.html" data-chapter="04"><span class="nav-num">04</span> 첫 번째 커밋<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="05-log-head.html" data-chapter="05"><span class="nav-num">05</span> HEAD & 히스토리<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 2 — 브랜치</div>
+                <ul class="sidebar-nav">
+                    <li><a href="06-branch-merge.html" data-chapter="06"><span class="nav-num">06</span> 브랜치 & Merge<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="07-undo.html" data-chapter="07"><span class="nav-num">07</span> 실수 되돌리기<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 3 — GitHub</div>
+                <ul class="sidebar-nav">
+                    <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
+                            <div class="nav-check"></div></a></li>
+                    <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
+                            <div class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-progress">
+                <div class="progress-label"><span>전체 진행률</span><span>0/9 완료</span></div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width:0%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="chapter-header">
+                <div class="chapter-header-left">
+                    <button class="menu-toggle">☰</button>
+                    <span class="chapter-part-badge part-3">Part 3</span>
+                    <span class="chapter-progress-text">0 / 9 챕터 완료</span>
+                </div>
+                <button class="btn-complete" data-chapter="09">⬜ 완료 체크</button>
+            </header>
+
+            <article class="chapter-content">
+                <div class="chapter-title-wrap">
+                    <div class="chapter-num">Chapter 09 · 약 60분</div>
+                    <h1 class="chapter-title">Pull Request & 팀 협업</h1>
+                    <p class="chapter-desc">실제 팀에서 사용하는 협업 방식! PR로 코드 리뷰를 받고, 이슈를 관리하고, Fork로 오픈소스에 기여하는 방법을 배웁니다.</p>
+                </div>
+
+                <div class="learning-goals">
+                    <div class="learning-goals-title">🎯 이 챕터를 마치면</div>
+                    <ul>
+                        <li>Pull Request의 목적과 흐름을 이해한다</li>
+                        <li>GitHub에서 PR을 직접 생성하고 리뷰할 수 있다</li>
+                        <li>이슈(Issue)로 작업을 관리할 수 있다</li>
+                        <li>Fork 워크플로우로 오픈소스에 기여할 수 있다</li>
+                        <li>팀 협업 실습을 완료한다</li>
+                    </ul>
+                </div>
+
+                <!-- PR이란? -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🔃</span> 1. Pull Request란?</h2>
+
+                    <p><strong>Pull Request(PR)</strong>는 내가 만든 브랜치의 변경사항을 다른 브랜치에 병합(merge)해달라고 <strong>요청</strong>하는
+                        것입니다. 팀원들의 코드 리뷰를 받는 핵심 협업 메커니즘입니다.</p>
+
+                    <!-- PR 흐름 다이어그램 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Pull Request 전체 흐름</div>
+                        <div style="display: flex; flex-direction: column; gap: 0;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div
+                                    style="background: var(--accent-dim); border: 1.5px solid var(--accent); border-radius: 8px; padding: 12px 16px; flex: 1; text-align: center;">
+                                    <div style="font-size: 18px; margin-bottom: 4px;">1️⃣</div>
+                                    <div style="font-size: 12px; font-weight: 700; color: var(--accent);">브랜치 생성</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">feature/login</div>
+                                </div>
+                                <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                                <div
+                                    style="background: var(--yellow-dim); border: 1.5px solid var(--yellow); border-radius: 8px; padding: 12px 16px; flex: 1; text-align: center;">
+                                    <div style="font-size: 18px; margin-bottom: 4px;">2️⃣</div>
+                                    <div style="font-size: 12px; font-weight: 700; color: var(--yellow);">개발 + 커밋</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">push to GitHub</div>
+                                </div>
+                                <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                                <div
+                                    style="background: var(--purple-dim); border: 1.5px solid var(--purple); border-radius: 8px; padding: 12px 16px; flex: 1; text-align: center;">
+                                    <div style="font-size: 18px; margin-bottom: 4px;">3️⃣</div>
+                                    <div style="font-size: 12px; font-weight: 700; color: var(--purple);">PR 생성</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">GitHub UI에서</div>
+                                </div>
+                                <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                                <div
+                                    style="background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; flex: 1; text-align: center;">
+                                    <div style="font-size: 18px; margin-bottom: 4px;">4️⃣</div>
+                                    <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary);">코드 리뷰
+                                    </div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">팀원 리뷰 + 수정</div>
+                                </div>
+                                <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                                <div
+                                    style="background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 8px; padding: 12px 16px; flex: 1; text-align: center;">
+                                    <div style="font-size: 18px; margin-bottom: 4px;">5️⃣</div>
+                                    <div style="font-size: 12px; font-weight: 700; color: var(--green);">Merge!</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">main에 병합</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PR 실습 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🛠️</span> 2. PR 실습</h2>
+
+                    <div class="step-list">
+                        <div class="step-item active">
+                            <div class="step-left">
+                                <div class="step-num">1</div>
+                            </div>
+                            <div class="step-body">
+                                <div class="step-title">새 브랜치 생성 및 작업 후 push</div>
+                                <div class="step-desc">
+                                    <div class="code-block terminal" style="margin-top: 8px;">
+                                        <div class="code-block-header"><span class="code-lang">Git Bash</span></div>
+                                        <pre><code><span class="prompt">$</span> git switch -c feature/signup
+<span class="prompt">$</span> touch signup.html
+<span class="prompt">$</span> git add .
+<span class="prompt">$</span> git commit -m "feat: 회원가입 페이지 추가"
+<span class="prompt">$</span> git push origin feature/signup</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-left">
+                                <div class="step-num">2</div>
+                            </div>
+                            <div class="step-body">
+                                <div class="step-title">GitHub에서 PR 생성</div>
+                                <div class="step-desc">
+                                    GitHub 저장소 → "Compare & pull request" 버튼 클릭 → 제목, 설명 입력 → Create pull request
+                                    <div class="alert tip" style="margin-top: 8px;">
+                                        <span class="alert-icon">💡</span>
+                                        <p>좋은 PR 설명에는: <strong>① 무엇을 변경했는지 ② 왜 변경했는지 ③ 어떻게 테스트했는지</strong>를 포함하세요.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-left">
+                                <div class="step-num">3</div>
+                            </div>
+                            <div class="step-body">
+                                <div class="step-title">코드 리뷰 & Merge</div>
+                                <div class="step-desc">
+                                    Files changed 탭에서 코드 확인 → 리뷰 코멘트 추가 → 승인 후 "Merge pull request" 클릭
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 이슈 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">📋</span> 3. 이슈(Issue) 관리</h2>
+
+                    <p>이슈는 <strong>버그 리포트, 기능 요청, 작업 관리</strong>를 위한 GitHub의 협업 도구입니다.</p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">이슈 → PR → Merge 연결 워크플로우</div>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <div
+                                style="background: var(--red-dim); border: 1px solid var(--red); border-radius: 8px; padding: 14px; flex: 1; min-width: 120px; text-align: center;">
+                                <div style="font-size: 20px; margin-bottom: 4px;">🐛</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--red);">이슈 생성</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">"#42 로그인 버그"
+                                </div>
+                            </div>
+                            <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                            <div
+                                style="background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 8px; padding: 14px; flex: 1; min-width: 120px; text-align: center;">
+                                <div style="font-size: 20px; margin-bottom: 4px;">🌿</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--accent);">브랜치 생성</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+                                    fix/42-login-bug</div>
+                            </div>
+                            <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                            <div
+                                style="background: var(--purple-dim); border: 1px solid var(--purple); border-radius: 8px; padding: 14px; flex: 1; min-width: 120px; text-align: center;">
+                                <div style="font-size: 20px; margin-bottom: 4px;">🔃</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--purple);">PR 생성</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">"Closes #42" 입력
+                                </div>
+                            </div>
+                            <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                            <div
+                                style="background: var(--green-dim); border: 1px solid var(--green); border-radius: 8px; padding: 14px; flex: 1; min-width: 120px; text-align: center;">
+                                <div style="font-size: 20px; margin-bottom: 4px;">✅</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--green);">Merge 시 이슈 자동 닫힘!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert tip">
+                        <span class="alert-icon">💡</span>
+                        <p>PR 설명에 <code>Closes #42</code>, <code>Fixes #42</code>, <code>Resolves #42</code>를 입력하면 PR이
+                            Merge될 때 해당 이슈가 자동으로 닫힙니다.</p>
+                    </div>
+                </section>
+
+                <!-- Fork 워크플로우 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🍴</span> 4. Fork 워크플로우</h2>
+
+                    <p>오픈소스 프로젝트나 직접 Write 권한이 없는 저장소에 기여할 때는 <strong>Fork</strong> 방식을 사용합니다.</p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Fork 협업 흐름</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                            <div
+                                style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center;">
+                                <div style="font-size: 22px; margin-bottom: 6px;">🌳</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--text-primary);">원본 저장소</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">원작자 repo<br>직접 수정 불가</div>
+                            </div>
+                            <div
+                                style="background: var(--accent-dim); border: 1.5px solid var(--accent); border-radius: 8px; padding: 14px; text-align: center;">
+                                <div style="font-size: 22px; margin-bottom: 6px;">🍴</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--accent);">내 Fork</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">내 GitHub에 복사<br>마음대로 수정 OK</div>
+                            </div>
+                            <div
+                                style="background: var(--green-dim); border: 1.5px solid var(--green); border-radius: 8px; padding: 14px; text-align: center;">
+                                <div style="font-size: 22px; margin-bottom: 6px;">💻</div>
+                                <div style="font-size: 12px; font-weight: 700; color: var(--green);">내 로컬</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">clone해서 작업</div>
+                            </div>
+                        </div>
+                        <div
+                            style="font-size: 12px; color: var(--text-muted); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                            <span>원본 Fork →</span>
+                            <span>내 Fork clone →</span>
+                            <span>로컬 작업 →</span>
+                            <span>내 Fork push →</span>
+                            <span style="color: var(--green); font-weight: 700;">원본에 PR 생성!</span>
+                        </div>
+                    </div>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash — Fork 후 원본 upstream 연결</span>
+                        </div>
+                        <pre><code><span class="comment"># Fork한 내 저장소 clone</span>
+<span class="prompt">$</span> git clone https://github.com/내이름/저장소.git
+
+<span class="comment"># 원본 저장소를 upstream으로 추가</span>
+<span class="prompt">$</span> git remote add upstream https://github.com/원작자/저장소.git
+
+<span class="comment"># 원본 최신 상태 반영</span>
+<span class="prompt">$</span> git fetch upstream
+<span class="prompt">$</span> git merge upstream/main
+
+<span class="comment"># 내 브랜치에서 작업 후 내 Fork에 push</span>
+<span class="prompt">$</span> git push origin feature/my-contribution
+
+<span class="comment"># → GitHub에서 원본 저장소로 PR 생성!</span></code></pre>
+                    </div>
+                </section>
+
+                <!-- 축하 섹션 -->
+                <div
+                    style="background: linear-gradient(135deg, var(--accent-dim), var(--green-dim)); border: 1.5px solid var(--accent); border-radius: 16px; padding: 36px; text-align: center; margin: 32px 0;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+                    <h2 style="font-size: 24px; color: var(--text-primary); margin-bottom: 8px;">모든 챕터를 완료했습니다!</h2>
+                    <p style="color: var(--text-secondary); font-size: 15px; max-width: 500px; margin: 0 auto 20px;">
+                        Git 기초부터 브랜치 전략, GitHub 협업, Pull Request까지 — 실무에서 바로 쓸 수 있는 Git & GitHub 핵심을 모두 배웠습니다.
+                    </p>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; max-width: 600px; margin: 0 auto;">
+                        <div style="background: var(--bg-card); border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <div style="font-size: 20px; margin-bottom: 4px;">🌱</div>
+                            <strong>버전 관리</strong>
+                            <div style="color: var(--text-muted); font-size: 11px;">commit, log, status</div>
+                        </div>
+                        <div style="background: var(--bg-card); border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <div style="font-size: 20px; margin-bottom: 4px;">🌿</div>
+                            <strong>브랜치 전략</strong>
+                            <div style="color: var(--text-muted); font-size: 11px;">branch, merge</div>
+                        </div>
+                        <div style="background: var(--bg-card); border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <div style="font-size: 20px; margin-bottom: 4px;">☁️</div>
+                            <strong>원격 협업</strong>
+                            <div style="color: var(--text-muted); font-size: 11px;">push, pull, PR</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-section">
+                    <div class="quiz-title">✅ 이해도 체크</div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">PR이 왜 필요한지 (코드 리뷰, 협업) 설명할 수 있다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">직접 PR을 생성하고 Merge해봤다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">이슈와 PR을 연결하는 방법을 안다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Fork 워크플로우가 언제 사용되는지 이해한다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">팀원과 실제 협업 실습을 완료했다</div>
+                    </div>
+                </div>
+
+                <div class="cheatsheet" style="margin-top: 24px;">
+                    <div class="cheatsheet-header">📌 이 챕터 핵심</div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git push origin 브랜치명</code>
+                        <div class="cheat-desc">PR용 브랜치 push</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">Closes #이슈번호</code>
+                        <div class="cheat-desc">PR 설명에 적으면 merge 시 이슈 자동 닫힘</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git remote add upstream URL</code>
+                        <div class="cheat-desc">Fork 후 원본 저장소 연결</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git fetch upstream</code>
+                        <div class="cheat-desc">원본 최신 상태 가져오기</div>
+                    </div>
+                </div>
+
+                <div class="chapter-nav">
+                    <a href="08-github-remote.html" class="nav-btn">← Ch.08 GitHub 원격 저장소</a>
+                    <a href="../index.html" class="nav-btn next"
+                        style="background: linear-gradient(135deg, var(--accent), var(--purple)); border: none; color: #fff;">🎉
+                        완료! 목차로 →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

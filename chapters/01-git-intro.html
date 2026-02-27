@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch.01 Git이란? | Git & GitHub 완전 정복</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+
+<body>
+    <div class="layout">
+
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="logo-text">Git & GitHub</div>
+                    <div class="logo-sub">완전 정복 과정</div>
+                </div>
+            </a>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 1 — Git 기초</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-git-intro.html" data-chapter="01"><span class="nav-num">01</span> Git이란?<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="02-setup.html" data-chapter="02"><span class="nav-num">02</span> 환경 세팅<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="03-git-flow.html" data-chapter="03"><span class="nav-num">03</span> Git 내부 구조<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="04-first-commit.html" data-chapter="04"><span class="nav-num">04</span> 첫 번째 커밋<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="05-log-head.html" data-chapter="05"><span class="nav-num">05</span> HEAD & 히스토리<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 2 — 브랜치</div>
+                <ul class="sidebar-nav">
+                    <li><a href="06-branch-merge.html" data-chapter="06"><span class="nav-num">06</span> 브랜치 & Merge<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="07-undo.html" data-chapter="07"><span class="nav-num">07</span> 실수 되돌리기<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 3 — GitHub</div>
+                <ul class="sidebar-nav">
+                    <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
+                            <div class="nav-check"></div></a></li>
+                    <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
+                            <div class="nav-check"></div></a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-progress">
+                <div class="progress-label"><span>전체 진행률</span><span>0/9 완료</span></div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width:0%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 메인 -->
+        <div class="main-content">
+
+            <!-- 헤더 -->
+            <header class="chapter-header">
+                <div class="chapter-header-left">
+                    <button class="menu-toggle">☰</button>
+                    <span class="chapter-part-badge part-1">Part 1</span>
+                    <span class="chapter-progress-text">0 / 9 챕터 완료</span>
+                </div>
+                <button class="btn-complete" data-chapter="01">⬜ 완료 체크</button>
+            </header>
+
+            <!-- 본문 -->
+            <article class="chapter-content">
+
+                <!-- 타이틀 -->
+                <div class="chapter-title-wrap">
+                    <div class="chapter-num">Chapter 01 · 약 40분</div>
+                    <h1 class="chapter-title">Git이란 무엇인가?</h1>
+                    <p class="chapter-desc">버전 관리가 왜 필요한지, Git과 GitHub는 어떻게 다른지 이해합니다.</p>
+                </div>
+
+                <!-- 학습 목표 -->
+                <div class="learning-goals">
+                    <div class="learning-goals-title">🎯 이 챕터를 마치면</div>
+                    <ul>
+                        <li>버전 관리가 왜 필요한지 설명할 수 있다</li>
+                        <li>Git과 GitHub의 차이점을 구분할 수 있다</li>
+                        <li>Git의 분산 버전 관리 개념을 이해한다</li>
+                    </ul>
+                </div>
+
+                <!-- 1. 버전 관리의 필요성 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">😰</span> 1. 버전 관리가 없다면 일어나는 일</h2>
+
+                    <p>개발을 처음 시작하면 이런 상황을 한 번쯤 겪게 됩니다.</p>
+
+                    <!-- 파일 지옥 시각화 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">😱 버전 관리 없이 6개월 작업한 폴더</div>
+                        <div
+                            style="background: var(--bg-secondary); border-radius: 8px; padding: 20px; font-family: var(--font-code); font-size: 13px; color: var(--text-secondary);">
+                            <div style="color: var(--yellow); margin-bottom: 8px;">📁 my-project/</div>
+                            <div style="padding-left: 20px; display: flex; flex-direction: column; gap: 4px;">
+                                <div>📄 index.html</div>
+                                <div style="color: var(--text-muted);">📄 index_backup.html</div>
+                                <div style="color: var(--text-muted);">📄 index_final.html</div>
+                                <div style="color: var(--red);">📄 index_final_진짜.html</div>
+                                <div style="color: var(--red);">📄 index_final_진짜최종.html</div>
+                                <div style="color: var(--red); font-weight: 700;">📄 index_최종_진짜진짜최종.html</div>
+                                <div style="color: var(--text-muted);">📄 index_20240101.html</div>
+                                <div style="color: var(--text-muted);">📄 index_20240215_이거쓰자.html</div>
+                                <div style="color: var(--yellow);">📁 backup/</div>
+                                <div style="padding-left: 20px; color: var(--text-muted);">📁 backup_old/</div>
+                                <div style="padding-left: 40px; color: var(--text-muted);">📁 backup_really_old/</div>
+                            </div>
+                            <div style="margin-top: 12px; color: var(--red); font-size: 12px;">
+                                ⚠️ 어떤 파일이 최신 버전인지 알 수 없음<br>
+                                ⚠️ 누가 언제 무엇을 수정했는지 알 수 없음<br>
+                                ⚠️ 2주 전으로 되돌리고 싶어도 불가능
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>Git을 사용하면 이 모든 문제가 해결됩니다. <strong>파일은 하나만 유지하면서</strong>, 변경 이력을 자동으로 관리해줍니다.</p>
+
+                    <!-- Git이 해결해주는 것 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">✅ Git을 사용하면</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div
+                                style="background: var(--green-dim); border: 1px solid var(--green); border-radius: 8px; padding: 16px;">
+                                <div
+                                    style="font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 8px;">
+                                    🔖 버전 추적</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">언제, 무엇이 바뀌었는지 자동으로 기록</div>
+                            </div>
+                            <div
+                                style="background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 8px; padding: 16px;">
+                                <div
+                                    style="font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">
+                                    ⏪ 시간 여행</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">과거 어느 시점으로든 되돌리기 가능</div>
+                            </div>
+                            <div
+                                style="background: var(--purple-dim); border: 1px solid var(--purple); border-radius: 8px; padding: 16px;">
+                                <div
+                                    style="font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 8px;">
+                                    👥 협업</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">여러 명이 동시에 작업, 충돌 시 해결 가능
+                                </div>
+                            </div>
+                            <div
+                                style="background: var(--yellow-dim); border: 1px solid var(--yellow); border-radius: 8px; padding: 16px;">
+                                <div
+                                    style="font-size: 13px; font-weight: 700; color: var(--yellow); margin-bottom: 8px;">
+                                    🌿 브랜치</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">실험적인 작업을 안전하게, 메인 코드 보호
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Git이란 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🌿</span> 2. Git이란?</h2>
+
+                    <p><strong>Git</strong>은 소프트웨어 개발에서 사용하는 <strong>분산 버전 관리 시스템(DVCS)</strong>입니다. 2005년 리눅스 창시자 리누스
+                        토르발스가 만들었습니다.</p>
+
+                    <!-- Git 핵심 특징 다이어그램 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Git의 핵심 동작 방식</div>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- 스냅샷 개념 -->
+                            <div>
+                                <div
+                                    style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+                                    📸 스냅샷 기반 — 커밋할 때마다 그 순간을 통째로 저장</div>
+                                <div
+                                    style="display: flex; gap: 8px; align-items: center; overflow-x: auto; padding-bottom: 4px;">
+                                    <div style="text-align: center; flex-shrink: 0;">
+                                        <div
+                                            style="background: var(--bg-secondary); border: 1.5px solid var(--accent); border-radius: 8px; padding: 10px 14px; font-size: 11px; font-family: var(--font-code); margin-bottom: 4px;">
+                                            <div>index.html v1</div>
+                                            <div style="color: var(--text-muted);">style.css v1</div>
+                                        </div>
+                                        <div style="font-size: 10px; color: var(--text-muted);">Commit 1</div>
+                                    </div>
+                                    <div style="color: var(--text-muted); font-size: 20px; flex-shrink: 0;">→</div>
+                                    <div style="text-align: center; flex-shrink: 0;">
+                                        <div
+                                            style="background: var(--bg-secondary); border: 1.5px solid var(--green); border-radius: 8px; padding: 10px 14px; font-size: 11px; font-family: var(--font-code); margin-bottom: 4px;">
+                                            <div style="color: var(--green);">index.html v2</div>
+                                            <div style="color: var(--text-muted);">style.css v1 (동일)</div>
+                                        </div>
+                                        <div style="font-size: 10px; color: var(--text-muted);">Commit 2</div>
+                                    </div>
+                                    <div style="color: var(--text-muted); font-size: 20px; flex-shrink: 0;">→</div>
+                                    <div style="text-align: center; flex-shrink: 0;">
+                                        <div
+                                            style="background: var(--bg-secondary); border: 1.5px solid var(--yellow); border-radius: 8px; padding: 10px 14px; font-size: 11px; font-family: var(--font-code); margin-bottom: 4px;">
+                                            <div style="color: var(--green);">index.html v2</div>
+                                            <div style="color: var(--yellow);">style.css v2</div>
+                                        </div>
+                                        <div style="font-size: 10px; color: var(--text-muted);">Commit 3 (현재)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Git의 주요 특징</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>특징</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="key-col">🖥️ 로컬 작동</td>
+                                <td>인터넷 없이도 대부분의 작업 가능</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">⚡ 빠른 속도</td>
+                                <td>로컬에서 작동하므로 매우 빠름</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">🔒 무결성</td>
+                                <td>SHA-1 해시로 모든 변경을 추적, 데이터 손상 감지</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">🌿 브랜치</td>
+                                <td>가볍고 빠른 브랜치 생성/전환</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">📦 분산</td>
+                                <td>모든 개발자가 전체 히스토리를 로컬에 보유</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 3. GitHub이란 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🐙</span> 3. GitHub이란?</h2>
+
+                    <p><strong>GitHub</strong>는 Git 저장소를 클라우드에서 호스팅하는 <strong>웹 플랫폼</strong>입니다. Git이 도구라면, GitHub는 그
+                        도구를 사용하는 온라인 공간입니다.</p>
+
+                    <!-- Git vs GitHub 비교 다이어그램 -->
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Git vs GitHub — 핵심 차이</div>
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center;">
+                            <div
+                                style="background: var(--accent-dim); border: 1.5px solid var(--accent); border-radius: 12px; padding: 24px; text-align: center;">
+                                <div style="font-size: 40px; margin-bottom: 8px;">🌿</div>
+                                <div
+                                    style="font-size: 18px; font-weight: 800; color: var(--accent); margin-bottom: 8px;">
+                                    Git</div>
+                                <div
+                                    style="font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px; text-align: left;">
+                                    <div>✔ 내 컴퓨터에 설치</div>
+                                    <div>✔ 버전 관리 도구</div>
+                                    <div>✔ 인터넷 없이 동작</div>
+                                    <div>✔ 오픈소스 소프트웨어</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; color: var(--text-muted); font-size: 13px;">
+                                <div style="font-size: 20px; margin-bottom: 4px;">🔗</div>
+                                <div>Git을</div>
+                                <div>온라인에서</div>
+                            </div>
+                            <div
+                                style="background: var(--purple-dim); border: 1.5px solid var(--purple); border-radius: 12px; padding: 24px; text-align: center;">
+                                <div style="font-size: 40px; margin-bottom: 8px;">🐙</div>
+                                <div
+                                    style="font-size: 18px; font-weight: 800; color: var(--purple); margin-bottom: 8px;">
+                                    GitHub</div>
+                                <div
+                                    style="font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px; text-align: left;">
+                                    <div>✔ 웹사이트 (클라우드)</div>
+                                    <div>✔ 원격 저장소 제공</div>
+                                    <div>✔ 팀 협업 도구</div>
+                                    <div>✔ 포트폴리오 공간</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted);">
+                            GitHub 외에도 GitLab, Bitbucket 등의 유사한 플랫폼이 있습니다.
+                        </div>
+                    </div>
+
+                    <!-- 관계 설명 -->
+                    <div style="display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;">
+                        <div class="highlight-box info" style="flex: 1; min-width: 200px;">
+                            <div class="box-title">💡 비유로 이해하기</div>
+                            <p><strong>Git</strong>은 내 컴퓨터의 <strong>사진 앱</strong> (사진 찍고 관리)<br>
+                                <strong>GitHub</strong>는 <strong>구글 포토</strong> (온라인에 올려서 공유)
+                            </p>
+                        </div>
+                        <div class="highlight-box success" style="flex: 1; min-width: 200px;">
+                            <div class="box-title">✅ 정리</div>
+                            <p>Git = 도구 (설치 필요)<br>GitHub = 서비스 (가입 필요)<br>둘 다 함께 써야 진정한 협업 가능!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. 형상관리 개념 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">📚</span> 4. 형상관리(SCM)란?</h2>
+
+                    <p><strong>형상관리(Software Configuration Management)</strong>는 소프트웨어 개발 과정에서 코드, 문서, 설정 파일 등의 변경사항을
+                        체계적으로 추적하고 관리하는 활동입니다.</p>
+
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>목표</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="key-col">버전 관리</td>
+                                <td>소프트웨어의 여러 버전을 기록, 특정 시점으로 되돌릴 수 있음</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">변경 추적</td>
+                                <td>누가, 언제, 무엇을 변경했는지 기록</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">협업 지원</td>
+                                <td>여러 개발자가 동시에 작업할 수 있도록 충돌 방지</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col">품질 보장</td>
+                                <td>체계적인 관리로 오류를 줄이고 품질 향상</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert tip">
+                        <span class="alert-icon">💡</span>
+                        <p>Git은 형상관리 도구 중 현재 가장 널리 사용되는 표준입니다. 전 세계 개발자의 약 93%가 Git을 사용합니다.</p>
+                    </div>
+                </section>
+
+                <!-- 체크리스트 -->
+                <div class="quiz-section">
+                    <div class="quiz-title">✅ 이해도 체크 — 클릭하여 확인</div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">버전 관리 없이 발생하는 문제점을 2가지 이상 말할 수 있다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Git은 내 컴퓨터에 설치하는 도구이고, GitHub는 온라인 서비스라는 차이를 이해했다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Git이 파일을 스냅샷 방식으로 저장한다는 것을 이해했다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">분산 버전 관리 시스템(DVCS)이 무엇인지 설명할 수 있다</div>
+                    </div>
+                </div>
+
+                <!-- 명령어 치트시트 -->
+                <div class="cheatsheet" style="margin-top: 24px;">
+                    <div class="cheatsheet-header">📌 이 챕터의 핵심 용어</div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">Git</code>
+                        <div class="cheat-desc">분산 버전 관리 시스템 — 로컬 컴퓨터에 설치</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">GitHub</code>
+                        <div class="cheat-desc">Git 저장소 호스팅 플랫폼 — 클라우드 서비스</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">Repository (저장소)</code>
+                        <div class="cheat-desc">프로젝트와 변경 이력이 저장되는 공간</div>
+                    </div>
+                    <div class="cheatsheet-row">
+                        <code class="cheat-cmd">Commit</code>
+                        <div class="cheat-desc">변경사항을 저장소에 기록하는 행위 (스냅샷)</div>
+                    </div>
+                </div>
+
+                <!-- 챕터 네비게이션 -->
+                <div class="chapter-nav">
+                    <a href="../index.html" class="nav-btn">← 목차로</a>
+                    <a href="02-setup.html" class="nav-btn next">Ch.02 환경 세팅 →</a>
+                </div>
+
+            </article>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

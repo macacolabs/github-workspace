@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & GitHub 완전 정복 | 입문자를 위한 8시간 완성</title>
+  <meta name="description" content="완전 입문자를 위한 Git & GitHub 강의. 버전 관리부터 Pull Request까지 8시간 안에 마스터하세요.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body class="no-sidebar">
+
+  <!-- 상단 헤더 -->
+  <header class="top-bar">
+    <a href="index.html" class="top-bar-logo">
+      <div class="logo-icon">🌿</div>
+      <span>Git & GitHub 완전 정복</span>
+    </a>
+    <div class="top-bar-right">
+      <span class="top-bar-stat" id="progress-label">0 / 9 챕터 완료</span>
+      <a href="chapters/01-git-intro.html" class="top-bar-btn">시작하기 →</a>
+    </div>
+  </header>
+
+  <!-- 전체 진행률 바 -->
+  <div class="overall-progress">
+    <div class="op-label">
+      <span>전체 진행률</span>
+      <span class="op-pct">0%</span>
+    </div>
+    <div class="op-bar">
+      <div class="op-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- 히어로 섹션 -->
+  <section class="index-hero">
+    <div class="hero-badge">🌱 입문자 완성 과정</div>
+    <h1 class="hero-title">
+      <span>Git & GitHub</span>를<br>제대로 배우자
+    </h1>
+    <p class="hero-desc">
+      "최종본_진짜최종_진짜진짜최종.zip"에서 졸업하는 날.<br>
+      버전 관리부터 팀 협업까지, 개발자의 필수 도구를 처음부터 배웁니다.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-stat">⏱ <strong>총 8시간</strong> 과정</div>
+      <div class="hero-stat">📚 <strong>9개</strong> 챕터</div>
+      <div class="hero-stat">💻 <strong>Git Bash</strong> 실습</div>
+      <div class="hero-stat">🎯 <strong>완전 입문자</strong> 대상</div>
+    </div>
+  </section>
+
+  <!-- 챕터 목록 -->
+  <main>
+
+    <!-- PART 1 -->
+    <div class="part-divider p1">PART 1 — Git 기초 (로컬)</div>
+    <div class="chapter-grid" style="padding-top:0">
+
+      <a href="chapters/01-git-intro.html" class="chapter-card part-1" data-chapter="01">
+        <div class="card-num">Chapter 01 · 40분</div>
+        <div class="card-title">Git이란 무엇인가?</div>
+        <div class="card-desc">버전 관리의 필요성, Git vs GitHub 차이점, 형상관리의 기초 개념</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 40분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/02-setup.html" class="chapter-card part-1" data-chapter="02">
+        <div class="card-num">Chapter 02 · 40분</div>
+        <div class="card-title">환경 세팅</div>
+        <div class="card-desc">Git 설치, Git Bash 설정, GitHub 계정 생성, 인증 설정</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 40분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/03-git-flow.html" class="chapter-card part-1" data-chapter="03">
+        <div class="card-num">Chapter 03 · 60분</div>
+        <div class="card-title">Git 내부 구조 이해</div>
+        <div class="card-desc">Working Directory, Staging Area, Repository 3영역과 파일 상태 흐름</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 60분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/04-first-commit.html" class="chapter-card part-1" data-chapter="04">
+        <div class="card-num">Chapter 04 · 60분</div>
+        <div class="card-title">첫 번째 커밋 만들기</div>
+        <div class="card-desc">git init, add, commit, log 실습. .gitignore 설정. 좋은 커밋 메시지 작성법</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 60분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/05-log-head.html" class="chapter-card part-1" data-chapter="05">
+        <div class="card-num">Chapter 05 · 50분</div>
+        <div class="card-title">HEAD & 히스토리 탐색</div>
+        <div class="card-desc">git log 다양한 옵션, HEAD 포인터 개념, 커밋 히스토리 시각화</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 50분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- PART 2 -->
+    <div class="part-divider p2">PART 2 — 브랜치 전략</div>
+    <div class="chapter-grid" style="padding-top:0">
+
+      <a href="chapters/06-branch-merge.html" class="chapter-card part-2" data-chapter="06">
+        <div class="card-num">Chapter 06 · 60분</div>
+        <div class="card-title">브랜치 & Merge</div>
+        <div class="card-desc">브랜치 생성/전환, Fast-forward, 3-way Merge, 충돌 해결, 브랜치 전략</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 60분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/07-undo.html" class="chapter-card part-2" data-chapter="07">
+        <div class="card-num">Chapter 07 · 50분</div>
+        <div class="card-title">실수 되돌리기</div>
+        <div class="card-desc">git restore, reset (hard/soft/mixed), revert, stash 상황별 활용법</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 50분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- PART 3 -->
+    <div class="part-divider p3">PART 3 — GitHub 협업</div>
+    <div class="chapter-grid" style="padding-top:0">
+
+      <a href="chapters/08-github-remote.html" class="chapter-card part-3" data-chapter="08">
+        <div class="card-num">Chapter 08 · 60분</div>
+        <div class="card-title">GitHub 원격 저장소</div>
+        <div class="card-desc">원격 저장소 연결, push/pull/clone/fetch, GitHub 토큰 인증</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 60분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+      <a href="chapters/09-pull-request.html" class="chapter-card part-3" data-chapter="09">
+        <div class="card-num">Chapter 09 · 60분</div>
+        <div class="card-title">Pull Request & 팀 협업</div>
+        <div class="card-desc">PR 생성/리뷰/Merge, 이슈 연결, Fork 워크플로우, 팀 협업 실습</div>
+        <div class="card-footer">
+          <span class="card-time">⏱ 60분</span>
+          <span class="card-status todo">시작 전</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- 준비물 섹션 -->
+    <div style="padding: 0 48px 40px">
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div>
+          <h2 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            📦 수업 준비물
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary);">
+              <span style="background: var(--green-dim); color: var(--green); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">필수</span>
+              Windows / Mac / Linux 운영체제
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary);">
+              <span style="background: var(--green-dim); color: var(--green); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">필수</span>
+              인터넷 연결
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary);">
+              <span style="background: var(--green-dim); color: var(--green); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">필수</span>
+              텍스트 에디터 (VS Code 추천)
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-secondary);">
+              <span style="background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">권장</span>
+              GitHub 계정 (수업 중 생성 가능)
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            🎯 학습 후 할 수 있는 것
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--text-secondary);">
+            <div>✅ 내 프로젝트에 Git으로 버전 관리하기</div>
+            <div>✅ GitHub에 코드 올리고 팀원과 공유하기</div>
+            <div>✅ 브랜치로 안전하게 기능 개발하기</div>
+            <div>✅ Pull Request로 코드 리뷰하기</div>
+            <div>✅ 실수를 자신있게 되돌리기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    // 인덱스 전용: 진행률 레이블 업데이트
+    const count = (() => {
+      try { return Object.values(JSON.parse(localStorage.getItem('git-lecture-progress') || '{}')).filter(Boolean).length; } catch { return 0; }
+    })();
+    document.getElementById('progress-label').textContent = `${count} / 9 챕터 완료`;
+  </script>
+</body>
+</html>

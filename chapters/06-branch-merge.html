@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch.06 브랜치 & Merge | Git & GitHub 완전 정복</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="../index.html" class="sidebar-logo">
+                <div class="logo-icon">🌿</div>
+                <div>
+                    <div class="logo-text">Git & GitHub</div>
+                    <div class="logo-sub">완전 정복 과정</div>
+                </div>
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 1 — Git 기초</div>
+                <ul class="sidebar-nav">
+                    <li><a href="01-git-intro.html" data-chapter="01"><span class="nav-num">01</span> Git이란?<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="02-setup.html" data-chapter="02"><span class="nav-num">02</span> 환경 세팅<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="03-git-flow.html" data-chapter="03"><span class="nav-num">03</span> Git 내부 구조<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="04-first-commit.html" data-chapter="04"><span class="nav-num">04</span> 첫 번째 커밋<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="05-log-head.html" data-chapter="05"><span class="nav-num">05</span> HEAD & 히스토리<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 2 — 브랜치</div>
+                <ul class="sidebar-nav">
+                    <li><a href="06-branch-merge.html" data-chapter="06"><span class="nav-num">06</span> 브랜치 & Merge<div
+                                class="nav-check"></div></a></li>
+                    <li><a href="07-undo.html" data-chapter="07"><span class="nav-num">07</span> 실수 되돌리기<div
+                                class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Part 3 — GitHub</div>
+                <ul class="sidebar-nav">
+                    <li><a href="08-github-remote.html" data-chapter="08"><span class="nav-num">08</span> GitHub 원격 저장소
+                            <div class="nav-check"></div></a></li>
+                    <li><a href="09-pull-request.html" data-chapter="09"><span class="nav-num">09</span> Pull Request
+                            <div class="nav-check"></div></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-progress">
+                <div class="progress-label"><span>전체 진행률</span><span>0/9 완료</span></div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width:0%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="chapter-header">
+                <div class="chapter-header-left">
+                    <button class="menu-toggle">☰</button>
+                    <span class="chapter-part-badge part-2">Part 2</span>
+                    <span class="chapter-progress-text">0 / 9 챕터 완료</span>
+                </div>
+                <button class="btn-complete" data-chapter="06">⬜ 완료 체크</button>
+            </header>
+
+            <article class="chapter-content">
+                <div class="chapter-title-wrap">
+                    <div class="chapter-num">Chapter 06 · 약 60분</div>
+                    <h1 class="chapter-title">브랜치 & Merge</h1>
+                    <p class="chapter-desc">브랜치로 독립적인 작업 공간을 만들고, Merge로 합치는 Git의 핵심 협업 기능을 배웁니다.</p>
+                </div>
+
+                <div class="learning-goals">
+                    <div class="learning-goals-title">🎯 이 챕터를 마치면</div>
+                    <ul>
+                        <li>브랜치를 생성하고 전환할 수 있다</li>
+                        <li>Fast-forward와 3-way Merge의 차이를 이해한다</li>
+                        <li>Merge 충돌을 직접 해결할 수 있다</li>
+                        <li>실무 브랜치 네이밍 컨벤션을 안다</li>
+                    </ul>
+                </div>
+
+                <!-- 브랜치란 -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🌿</span> 1. 브랜치란?</h2>
+
+                    <p>브랜치는 <strong>독립적인 작업 공간</strong>입니다. 메인 코드에 영향을 주지 않고 새 기능을 개발하거나 버그를 수정할 수 있습니다.</p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">브랜치 없을 때 vs 있을 때</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <div style="font-size: 12px; color: var(--red); font-weight: 700; margin-bottom: 10px;">
+                                    ❌ 브랜치 없을 때</div>
+                                <div
+                                    style="font-family: var(--font-code); font-size: 12px; display: flex; flex-direction: column; gap: 2px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div
+                                            style="width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--accent);flex-shrink:0;">
+                                        </div>
+                                        <span style="color: var(--text-muted);">c1 초기 코드</span>
+                                    </div>
+                                    <div style="margin-left: 4px; width: 2px; height: 10px; background: var(--border);">
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div
+                                            style="width:10px;height:10px;border-radius:50%;background:var(--yellow);border:2px solid var(--yellow);flex-shrink:0;">
+                                        </div>
+                                        <span style="color: var(--text-muted);">c2 기능A + 버그수정 함께 커밋</span>
+                                    </div>
+                                    <div style="margin-left: 4px; width: 2px; height: 10px; background: var(--border);">
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div
+                                            style="width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid var(--red);flex-shrink:0;">
+                                        </div>
+                                        <span style="color: var(--red);">c3 ⚠️ 문제 발생!</span>
+                                    </div>
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">어떤 변경사항이
+                                    문제인지<br>구분이 안 됨</div>
+                            </div>
+                            <div>
+                                <div
+                                    style="font-size: 12px; color: var(--green); font-weight: 700; margin-bottom: 10px;">
+                                    ✅ 브랜치 활용</div>
+                                <svg viewBox="0 0 200 120" style="width:100%;max-height:120px;">
+                                    <!-- main -->
+                                    <circle cx="20" cy="60" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <line x1="20" y1="60" x2="80" y2="60" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="80" cy="60" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <line x1="80" y1="60" x2="160" y2="60" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="160" cy="60" r="6" fill="#3fb950" stroke="#3fb950" />
+                                    <text x="160" y="78" text-anchor="middle" fill="#3fb950" font-size="8">merge</text>
+                                    <text x="180" y="64" fill="#58a6ff" font-size="8">main</text>
+                                    <!-- feature -->
+                                    <line x1="80" y1="60" x2="100" y2="30" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="100" cy="30" r="5" fill="#a371f7" stroke="#a371f7" />
+                                    <line x1="100" y1="30" x2="140" y2="30" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="140" cy="30" r="5" fill="#a371f7" stroke="#a371f7" />
+                                    <line x1="140" y1="30" x2="160" y2="60" stroke="#30363d" stroke-width="2" />
+                                    <text x="120" y="20" text-anchor="middle" fill="#a371f7"
+                                        font-size="8">feature/login</text>
+                                </svg>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">안전하게 독립 작업 후
+                                    합치기</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 브랜치 명령어 -->
+                    <h3>주요 브랜치 명령어</h3>
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash</span></div>
+                        <pre><code><span class="comment"># 브랜치 목록 확인 (* = 현재 브랜치)</span>
+<span class="prompt">$</span> git branch
+<span class="output">* main
+  feature/login</span>
+
+<span class="comment"># 새 브랜치 생성</span>
+<span class="prompt">$</span> git branch feature/login
+
+<span class="comment"># 브랜치 전환</span>
+<span class="prompt">$</span> git switch feature/login
+
+<span class="comment"># 생성 + 전환 한 번에</span>
+<span class="prompt">$</span> git switch -c feature/login
+
+<span class="comment"># 브랜치 삭제 (merge 완료 후)</span>
+<span class="prompt">$</span> git branch -d feature/login</code></pre>
+                    </div>
+
+                    <h3>브랜치 네이밍 컨벤션</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>접두사</th>
+                                <th>용도</th>
+                                <th>예시</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="key-col"><code>feature/</code></td>
+                                <td>새 기능 개발</td>
+                                <td>feature/login, feature/dark-mode</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col"><code>fix/</code></td>
+                                <td>버그 수정</td>
+                                <td>fix/login-error, fix/typo</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col"><code>hotfix/</code></td>
+                                <td>긴급 운영 수정</td>
+                                <td>hotfix/critical-bug</td>
+                            </tr>
+                            <tr>
+                                <td class="key-col"><code>docs/</code></td>
+                                <td>문서 작업</td>
+                                <td>docs/api-guide</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Merge -->
+                <section class="section">
+                    <h2 class="section-title"><span class="section-icon">🔀</span> 2. Merge — 브랜치 합치기</h2>
+
+                    <!-- Fast-forward -->
+                    <h3>① Fast-forward Merge</h3>
+                    <p>두 브랜치 중 한쪽이 다른 쪽의 <strong>직계 후손</strong>일 때, 포인터만 이동하여 병합합니다.</p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">Fast-forward Merge — 포인터만 이동</div>
+                        <div
+                            style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center;">
+                            <div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Merge 전
+                                </div>
+                                <svg viewBox="0 0 180 80" style="width:100%;max-height:80px;">
+                                    <circle cx="30" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <line x1="30" y1="40" x2="80" y2="40" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="80" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <text x="55" y="58" text-anchor="middle" fill="#58a6ff" font-size="9">main</text>
+                                    <line x1="80" y1="40" x2="130" y2="40" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="130" cy="40" r="5" fill="#a371f7" stroke="#a371f7" />
+                                    <text x="130" y="58" text-anchor="middle" fill="#a371f7"
+                                        font-size="9">feature</text>
+                                </svg>
+                            </div>
+                            <div style="font-size: 20px; color: var(--text-muted);">→</div>
+                            <div>
+                                <div style="font-size: 12px; color: var(--green); margin-bottom: 8px;">Merge 후</div>
+                                <svg viewBox="0 0 180 80" style="width:100%;max-height:80px;">
+                                    <circle cx="30" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <line x1="30" y1="40" x2="80" y2="40" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="80" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                                    <line x1="80" y1="40" x2="130" y2="40" stroke="#30363d" stroke-width="2" />
+                                    <circle cx="130" cy="40" r="6" fill="#3fb950" stroke="#3fb950" />
+                                    <text x="105" y="58" text-anchor="middle" fill="#3fb950" font-size="9">main +
+                                        feature</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash — Fast-forward Merge 실습</span>
+                        </div>
+                        <pre><code><span class="comment"># feature/login 브랜치 생성 및 작업</span>
+<span class="prompt">$</span> git switch -c feature/login
+<span class="prompt">$</span> touch login.html
+<span class="prompt">$</span> git add .
+<span class="prompt">$</span> git commit -m "feat: 로그인 페이지 추가"
+
+<span class="comment"># main으로 이동 후 merge</span>
+<span class="prompt">$</span> git switch main
+<span class="prompt">$</span> git merge feature/login
+<span class="output">Updating a3f82bc..c7d3e9f
+Fast-forward
+ login.html | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)</span>
+
+<span class="comment"># merge 완료 → 브랜치 삭제</span>
+<span class="prompt">$</span> git branch -d feature/login</code></pre>
+                    </div>
+
+                    <!-- 3-way Merge -->
+                    <h3>② 3-way Merge</h3>
+                    <p>두 브랜치가 <strong>각자 다른 커밋</strong>을 가지고 있을 때, 공통 조상을 기준으로 새 merge commit이 생성됩니다.</p>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">3-way Merge — 새 Merge 커밋 생성</div>
+                        <svg viewBox="0 0 400 140" style="width:100%;max-height:140px;">
+                            <circle cx="60" cy="70" r="6" fill="#58a6ff" stroke="#58a6ff" />
+                            <text x="60" y="88" text-anchor="middle" fill="#8b949e" font-size="9">공통 조상</text>
+                            <line x1="60" y1="70" x2="140" y2="40" stroke="#30363d" stroke-width="2" />
+                            <circle cx="140" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                            <text x="140" y="26" text-anchor="middle" fill="#58a6ff" font-size="9">main 작업</text>
+                            <line x1="140" y1="40" x2="220" y2="40" stroke="#30363d" stroke-width="2" />
+                            <circle cx="220" cy="40" r="5" fill="#58a6ff" stroke="#58a6ff" />
+                            <line x1="60" y1="70" x2="140" y2="100" stroke="#30363d" stroke-width="2" />
+                            <circle cx="140" cy="100" r="5" fill="#a371f7" stroke="#a371f7" />
+                            <text x="140" y="116" text-anchor="middle" fill="#a371f7" font-size="9">feature 작업</text>
+                            <line x1="140" y1="100" x2="220" y2="100" stroke="#30363d" stroke-width="2" />
+                            <circle cx="220" cy="100" r="5" fill="#a371f7" stroke="#a371f7" />
+                            <line x1="220" y1="40" x2="310" y2="70" stroke="#30363d" stroke-width="2" />
+                            <line x1="220" y1="100" x2="310" y2="70" stroke="#30363d" stroke-width="2" />
+                            <circle cx="310" cy="70" r="7" fill="#3fb950" stroke="#3fb950" />
+                            <text x="310" y="88" text-anchor="middle" fill="#3fb950" font-size="9">Merge Commit</text>
+                        </svg>
+                    </div>
+
+                    <!-- 충돌 해결 -->
+                    <h3>③ Merge 충돌(Conflict) 해결</h3>
+                    <p>두 브랜치가 <strong>같은 파일의 같은 줄</strong>을 다르게 수정했을 때 충돌이 발생합니다.</p>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash — 충돌 발생</span></div>
+                        <pre><code><span class="prompt">$</span> git merge feature/login
+<span class="output">Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit.</span></code></pre>
+                    </div>
+
+                    <div class="git-diagram">
+                        <div class="git-diagram-title">충돌 파일 내부 — 직접 수정해야 합니다</div>
+                        <div class="conflict-box">
+                            <div class="conflict-line-sep">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</div>
+                            <div class="conflict-line-a"> &lt;h1&gt;안녕하세요&lt;/h1&gt; ← main 브랜치 내용</div>
+                            <div class="conflict-line-sep">=======</div>
+                            <div class="conflict-line-b"> &lt;h1&gt;Hello World&lt;/h1&gt; ← feature 브랜치 내용</div>
+                            <div class="conflict-line-sep">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login</div>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">
+                            ↓ &lt;&lt;&lt;&lt;, =====, &gt;&gt;&gt;&gt; 표시를 모두 제거하고 최종 내용만 남긴다
+                        </div>
+                        <div
+                            style="background: var(--green-dim); border: 1px solid var(--green); border-radius: 6px; padding: 12px; margin-top: 8px; font-family: var(--font-code); font-size: 13px;">
+                            <div class="conflict-line-ok"> &lt;h1&gt;안녕하세요 Hello World&lt;/h1&gt; ← 원하는 내용으로 수정</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block terminal">
+                        <div class="code-block-header"><span class="code-lang">Git Bash — 충돌 해결 후</span></div>
+                        <pre><code><span class="comment"># 충돌 파일 수정 후 add + commit</span>
+<span class="prompt">$</span> git add index.html
+<span class="prompt">$</span> git commit -m "merge: feature/login 충돌 해결 후 병합"</code></pre>
+                    </div>
+                </section>
+
+                <div class="quiz-section">
+                    <div class="quiz-title">✅ 이해도 체크</div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">브랜치를 생성하고 전환하는 명령어를 말할 수 있다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">Fast-forward와 3-way Merge의 차이를 설명할 수 있다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">충돌 파일에서 &lt;&lt;&lt;&lt;&lt;&lt;&lt; ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt;
+                            표시의 의미를 안다</div>
+                    </div>
+                    <div class="quiz-item">
+                        <div class="quiz-checkbox"></div>
+                        <div class="quiz-text">실습에서 브랜치 생성 → 작업 → merge까지 직접 해봤다</div>
+                    </div>
+                </div>
+
+                <div class="cheatsheet" style="margin-top: 24px;">
+                    <div class="cheatsheet-header">📌 이 챕터 명령어</div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git branch</code>
+                        <div class="cheat-desc">브랜치 목록 확인</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git switch -c 브랜치명</code>
+                        <div class="cheat-desc">브랜치 생성 + 전환</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git switch 브랜치명</code>
+                        <div class="cheat-desc">브랜치 전환</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git merge 브랜치명</code>
+                        <div class="cheat-desc">현재 브랜치에 다른 브랜치 병합</div>
+                    </div>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git branch -d 브랜치명</code>
+                        <div class="cheat-desc">브랜치 삭제</div>
+                    </div>
+                </div>
+
+                <div class="chapter-nav">
+                    <a href="05-log-head.html" class="nav-btn">← Ch.05 HEAD & 히스토리</a>
+                    <a href="07-undo.html" class="nav-btn next">Ch.07 실수 되돌리기 →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
