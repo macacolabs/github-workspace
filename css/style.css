@@ -5,49 +5,49 @@
 
 /* ── 디자인 토큰 ── */
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-tertiary: #1c2128;
-  --bg-card: #21262d;
-  --bg-hover: #30363d;
-  --border: #30363d;
-  --border-light: #21262d;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f6f8fa;
+  --bg-tertiary: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+  --border: #d0d7de;
+  --border-light: #e1e4e8;
 
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-primary: #1f2328;
+  --text-secondary: #656d76;
+  --text-muted: #6e7781;
 
-  --accent: #58a6ff;
-  --accent-hover: #79c0ff;
-  --accent-dim: rgba(88, 166, 255, .15);
+  --accent: #1a7f37;
+  --accent-hover: #116329;
+  --accent-dim: rgba(26, 127, 55, .1);
 
-  --green: #3fb950;
-  --green-dim: rgba(63, 185, 80, .15);
-  --yellow: #d29922;
-  --yellow-dim: rgba(210, 153, 34, .15);
-  --purple: #a371f7;
-  --purple-dim: rgba(163, 113, 247, .15);
-  --red: #f85149;
-  --red-dim: rgba(248, 81, 73, .15);
-  --orange: #e3b341;
-  --orange-dim: rgba(227, 179, 65, .15);
+  --green: #1a7f37;
+  --green-dim: rgba(26, 127, 55, .1);
+  --yellow: #9a6700;
+  --yellow-dim: rgba(154, 103, 0, .1);
+  --purple: #8250df;
+  --purple-dim: rgba(130, 80, 223, .1);
+  --red: #cf222e;
+  --red-dim: rgba(207, 34, 46, .1);
+  --orange: #bc4c00;
+  --orange-dim: rgba(188, 76, 0, .1);
 
   /* Git 영역 색상 */
-  --wd-color: #58a6ff;
-  /* Working Directory */
-  --sa-color: #d29922;
-  /* Staging Area */
-  --lr-color: #3fb950;
-  /* Local Repository */
-  --rr-color: #a371f7;
-  /* Remote Repository */
+  --wd-color: #bc4c00;
+  /* Working Directory (Orange) */
+  --sa-color: #9a6700;
+  /* Staging Area (Yellow) */
+  --lr-color: #1a7f37;
+  /* Local Repository (Green) */
+  --rr-color: #8250df;
+  /* Remote Repository (Purple) */
 
   --sidebar-width: 260px;
   --header-height: 60px;
   --radius: 8px;
   --radius-lg: 12px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, .4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .6);
+  --shadow: 0 1px 3px rgba(31, 35, 40, .12);
+  --shadow-lg: 0 8px 32px rgba(31, 35, 40, .15);
 
   --transition: 0.2s ease;
   --font-code: 'JetBrains Mono', 'Courier New', monospace;
@@ -83,7 +83,6 @@ a {
 
 a:hover {
   color: var(--accent-hover);
-  text-decoration: underline;
 }
 
 img {
@@ -145,12 +144,13 @@ img {
 .sidebar-logo .logo-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--accent), var(--purple));
+  background: linear-gradient(135deg, #aff5b4 0%, #34d058 100%);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 20px;
+  box-shadow: 0 2px 4px rgba(46, 164, 79, 0.15);
 }
 
 .sidebar-logo .logo-text {
@@ -313,8 +313,8 @@ img {
 }
 
 .part-1 {
-  background: var(--accent-dim);
-  color: var(--accent);
+  background: var(--orange-dim);
+  color: var(--orange);
 }
 
 .part-2 {
@@ -563,27 +563,39 @@ pre code {
   font-size: 14px;
 }
 
-/* 터미널 스타일 */
+/* 터미널 스타일 (Light Theme) */
 .code-block.terminal .code-block-header {
-  background: #1a1a2e;
-  border-bottom-color: #2d2d4e;
+  background: #f3f4f6;
+  border-bottom-color: #e5e7eb;
 }
 
 .code-block.terminal pre {
-  background: #0f0f1a;
+  background: #f9fafb;
 }
 
 .code-block.terminal .prompt {
-  color: var(--green);
+  color: #059669;
+  font-weight: 600;
 }
 
 .code-block.terminal .comment {
-  color: var(--text-muted);
+  color: #6b7280;
   font-style: italic;
 }
 
 .code-block.terminal .output {
-  color: var(--text-secondary);
+  color: #374151;
+}
+
+.code-block.terminal .copy-btn {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+}
+
+.code-block.terminal .copy-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
 }
 
 /* ── 인라인 강조 ── */
@@ -1296,7 +1308,7 @@ pre code {
 }
 
 .chapter-card.part-1::before {
-  background: var(--accent);
+  background: var(--orange);
 }
 
 .chapter-card.part-2::before {
