@@ -84,7 +84,7 @@
                     <div class="learning-goals-title">🎯 이 챕터를 마치면</div>
                     <ul>
                         <li>Git Bash를 설치하고 기본 설정을 완료할 수 있다</li>
-                        <li>GitHub 계정을 생성하고 Personal Access Token을 발급할 수 있다</li>
+                        <li>GitHub 계정을 만들고 Git Credential Manager로 안전하게 인증할 수 있다</li>
                         <li><code>git config</code>로 사용자 정보를 설정할 수 있다</li>
                         <li>Fork(GUI 도구)를 설치하고 이해할 수 있다</li>
                     </ul>
@@ -260,7 +260,7 @@ init.defaultbranch=main
 
                 <!-- 3. GitHub 계정 -->
                 <section class="section">
-                    <h2 class="section-title"><span class="section-icon">🐙</span> 3. GitHub 계정 생성 & 토큰 발급</h2>
+                    <h2 class="section-title"><span class="section-icon">🐙</span> 3. GitHub 계정 생성 & 브라우저 인증</h2>
 
                     <div class="step-list">
                         <div class="step-item active">
@@ -281,44 +281,44 @@ init.defaultbranch=main
                                 <div class="step-num">2</div>
                             </div>
                             <div class="step-body">
-                                <div class="step-title">Personal Access Token(PAT) 발급</div>
+                                <div class="step-title">Git Credential Manager(GCM) 브라우저 인증</div>
                                 <div class="step-desc">
-                                    <p>GitHub는 비밀번호 대신 <strong>토큰</strong>을 인증에 사용합니다.</p>
+                                    <p>Windows용 Git에 포함된 <strong>Git Credential Manager</strong>를 사용하면 처음 HTTPS push 때 브라우저에서 GitHub에 로그인할 수 있습니다. GCM이 인증정보와 2단계 인증을 안전하게 처리하므로 수업에서는 토큰을 직접 만들어 메모장에 저장하지 않습니다.</p>
 
                                     <!-- 토큰 발급 경로 시각화 -->
                                     <div class="git-diagram" style="margin: 12px 0;">
-                                        <div class="git-diagram-title">토큰 발급 경로</div>
+                                        <div class="git-diagram-title">수업 인증 흐름</div>
                                         <div
                                             style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px;">
                                             <div
                                                 style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
-                                                프로필 이미지 클릭</div>
+                                                HTTPS push</div>
                                             <div style="color: var(--text-muted);">→</div>
                                             <div
                                                 style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
-                                                Settings</div>
+                                                브라우저 열기</div>
                                             <div style="color: var(--text-muted);">→</div>
                                             <div
                                                 style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
-                                                Developer settings</div>
+                                                GitHub 로그인</div>
                                             <div style="color: var(--text-muted);">→</div>
                                             <div
                                                 style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px;">
-                                                Personal access tokens</div>
+                                                권한 승인</div>
                                             <div style="color: var(--text-muted);">→</div>
                                             <div
                                                 style="background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 6px; padding: 8px 12px; color: var(--accent); font-weight: 600;">
-                                                Generate new token (classic)</div>
+                                                GCM에 안전하게 저장</div>
                                         </div>
                                     </div>
 
                                     <div class="alert warn">
                                         <span class="alert-icon">⚠️</span>
-                                        <p>토큰은 <strong>생성 직후 한 번만</strong> 보여줍니다. 반드시 메모장에 저장해두세요!</p>
+                                        <p>브라우저가 열리지 않거나 오래된 자격증명 오류가 날 때만 강사와 함께 Credential Manager 상태를 확인합니다.</p>
                                     </div>
                                     <div class="alert tip" style="margin-top: 8px;">
                                         <span class="alert-icon">💡</span>
-                                        <p>권한(Scope)은 <strong>repo</strong>만 체크하면 됩니다. 만료 기간은 90일 이상 설정 권장.</p>
+                                        <p>PAT는 GCM을 사용할 수 없는 예외 상황에서만 사용합니다. 필요하면 저장소와 기간을 최소화한 fine-grained token을 선택하고 채팅·교안·저장소에 값을 남기지 않습니다.</p>
                                     </div>
                                 </div>
                             </div>
@@ -384,19 +384,19 @@ init.defaultbranch=main
                 <!-- 5. Windows 자격증명 팁 -->
                 <section class="section">
                     <h2 class="section-title"><span class="section-icon">🔐</span> 5. Windows 인증 정보 관리</h2>
-                    <p>GitHub에 처음 push/pull할 때 Windows에서 자격증명을 묻습니다. 토큰을 저장하는 방법입니다.</p>
+                    <p>GitHub에 처음 HTTPS push할 때 Git Credential Manager가 브라우저 로그인을 엽니다. 먼저 설치 상태를 확인합니다.</p>
                     <div class="code-block terminal">
                         <div class="code-block-header"><span class="code-lang">Git Bash</span></div>
-                        <pre><code><span class="comment"># 자격증명 캐시 저장 (15분)</span>
-<span class="prompt">$</span> git config --global credential.helper cache
+                        <pre><code><span class="comment"># 현재 자격증명 도우미 확인</span>
+<span class="prompt">$</span> git config --show-origin --get-all credential.helper
 
-<span class="comment"># 자격증명 영구 저장 (Windows)</span>
-<span class="prompt">$</span> git config --global credential.helper wincred</code></pre>
+<span class="comment"># push 시 안내에 따라 브라우저에서 GitHub 로그인</span>
+<span class="prompt">$</span> git push -u origin 브랜치명</code></pre>
                     </div>
 
                     <div class="highlight-box warning">
-                        <div class="box-title">⚠️ 토큰 초기화 방법 (Windows)</div>
-                        <p>제어판 → 사용자 계정 → 자격 증명 관리자 → Windows 자격 증명 → github.com 관련 항목 제거</p>
+                        <div class="box-title">⚠️ 인증 오류가 반복될 때</div>
+                        <p>오류 메시지와 위 설정 결과를 보존한 뒤 강사에게 공유합니다. 임의로 credential helper를 덮어쓰거나 토큰을 채팅에 붙여넣지 않습니다.</p>
                     </div>
                 </section>
 
@@ -417,7 +417,7 @@ init.defaultbranch=main
                     </div>
                     <div class="quiz-item">
                         <div class="quiz-checkbox"></div>
-                        <div class="quiz-text">Personal Access Token을 발급하고 안전한 곳에 저장했다</div>
+                        <div class="quiz-text">GCM 브라우저 인증을 완료하고 토큰을 파일이나 채팅에 남기지 않았다</div>
                     </div>
                 </div>
 

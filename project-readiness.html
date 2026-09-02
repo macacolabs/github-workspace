@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 투입 실습 | Git & GitHub</title>
+  <meta name="description" content="4시간 핵심 Git 수업과 프로젝트 반복 실습을 위한 성장형 미션">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/components.css">
+  <style>
+    .lab-shell{max-width:1080px;margin:0 auto;padding:40px 28px 80px}.lab-hero{padding:44px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(135deg,var(--bg-card),var(--bg-secondary));margin-bottom:28px}.lab-kicker{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--green);margin-bottom:10px}.lab-hero h1{font-size:38px;line-height:1.2;margin-bottom:12px}.lab-hero p,.lab-section>p{color:var(--text-secondary);line-height:1.8}.lab-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.lab-pill{padding:7px 11px;border-radius:999px;background:var(--bg-tertiary);color:var(--text-secondary);font-size:12px}.lab-section{margin-top:28px;padding:28px;border:1px solid var(--border);border-radius:14px;background:var(--bg-card)}.lab-section h2{font-size:23px;margin-bottom:9px}.lab-visual{display:block;width:100%;height:auto;margin:22px 0;border:1px solid var(--border);border-radius:12px;background:#0d1117}.lab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:20px}.lab-card{padding:18px;border:1px solid var(--border);border-radius:10px;background:var(--bg-secondary)}.lab-card h3{font-size:16px;margin-bottom:9px}.lab-card p,.lab-card li{font-size:13px;color:var(--text-secondary);line-height:1.65}.lab-card ul,.lab-card ol{padding-left:20px}.lab-command{margin:14px 0;padding:16px;border-radius:9px;background:#0d1117;color:#d6deeb;font-family:var(--font-code);font-size:13px;line-height:1.8;white-space:pre-wrap;overflow:auto}.evidence{border-left:4px solid var(--green)}.danger{border-left:4px solid var(--red)}.checkpoint{border-left:4px solid var(--accent)}.lab-table{width:100%;border-collapse:collapse;margin-top:18px;font-size:13px}.lab-table th,.lab-table td{padding:12px;border:1px solid var(--border);text-align:left;vertical-align:top}.lab-table th{background:var(--bg-tertiary);color:var(--text-primary)}.lab-table td{color:var(--text-secondary)}.source-list a{color:var(--accent)}.back-link{color:var(--text-secondary);font-size:13px}@media(max-width:720px){.lab-shell{padding:24px 16px 60px}.lab-hero{padding:28px}.lab-hero h1{font-size:29px}.lab-grid{grid-template-columns:1fr}.lab-section{padding:20px}.lab-table{display:block;overflow-x:auto}}
+  </style>
+</head>
+<body class="no-sidebar">
+<header class="top-bar"><a href="index.html" class="top-bar-logo"><div class="logo-icon">🌱</div><span>Git & GitHub 프로젝트 실습</span></a><div class="top-bar-right"><a href="chapters/01-git-intro.html" class="top-bar-btn">개념 교안 보기 →</a></div></header>
+<main class="lab-shell">
+<a class="back-link" href="index.html">← 전체 챕터</a>
+<section class="lab-hero"><div class="lab-kicker">PROJECT READY LAB</div><h1>명령 암기보다<br>상태를 보고 판단하는 Git</h1><p>하나의 <code>team-profile</code> 저장소를 4시간 동안 발전시킵니다. 매 단계에서 결과를 먼저 예측하고, 실행 결과를 관찰하고, 실패를 복구하고, Git 증거로 완료를 확인합니다.</p><div class="lab-meta"><span class="lab-pill">4시간 핵심</span><span class="lab-pill">2인 협업</span><span class="lab-pill">충돌 실습</span><span class="lab-pill">PR 리뷰</span><span class="lab-pill">이후 반복 훈련</span></div></section>
+
+<section class="lab-section"><h2>프로젝트의 기본 작업 루프</h2><p>프로젝트 중에는 이 순서를 반복합니다. 시작 위치와 변경 범위를 확인하지 않은 채 명령부터 입력하지 않습니다.</p><img class="lab-visual clickable-img" src="assets/visuals/project-git-loop.svg" alt="이슈 확인, main 최신화, 기능 브랜치, 변경 확인, 커밋, push, PR 리뷰, 병합과 동기화로 이어지는 프로젝트 Git 반복 흐름"><div class="lab-card checkpoint"><h3>설명 확인</h3><p>“지금 어느 브랜치인가?”, “어떤 변경이 커밋되는가?”, “원격과 무엇이 다른가?”를 각각 어떤 명령으로 확인할지 말합니다.</p></div></section>
+
+<section class="lab-section"><h2>1시간차 — 상태를 보고 작은 커밋 만들기</h2><p>파일 3개를 만들되 필요한 변경만 골라 두 번 커밋합니다. 복사하기 전에 각 명령 뒤의 상태를 먼저 예상합니다.</p><img class="lab-visual clickable-img" src="assets/visuals/git-three-areas.svg" alt="Working Tree에서 git add로 Staging Area로 이동하고 git commit으로 Repository에 기록되는 Git 3영역 흐름"><div class="lab-grid"><div class="lab-card"><h3>미션</h3><ol><li><code>team-profile</code> 생성 및 <code>git init</code></li><li>README, Java 파일, <code>.env</code> 생성</li><li><code>.env</code>를 <code>.gitignore</code>로 제외</li><li>README와 Java 변경을 서로 다른 커밋으로 기록</li></ol></div><div class="lab-card evidence"><h3>제출 증거</h3><ul><li><code>git status --short</code></li><li><code>git diff</code>와 <code>git diff --staged</code></li><li><code>git log --oneline -3</code></li><li><code>.env</code>가 추적되지 않는 이유 설명</li></ul></div></div><pre class="lab-command">git status --short
+git diff
+git add README.md
+git diff --staged
+git commit -m "docs: add team introduction"
+git log --oneline --decorate -3</pre></section>
+
+<section class="lab-section"><h2>2시간차 — 기능 브랜치에서 작업하기</h2><p><code>main</code>에서 직접 기능을 만들지 않습니다. 최신 <code>main</code>에서 기능 브랜치를 만들고, 변경 위치와 커밋 그래프를 확인합니다.</p><img class="lab-visual clickable-img" src="assets/visuals/branch-pr-flow.svg" alt="main에서 feature 브랜치를 만들고 커밋한 뒤 push와 Pull Request 리뷰를 거쳐 main으로 병합하는 흐름"><div class="lab-grid"><div class="lab-card"><h3>미션</h3><ol><li><code>git switch -c feature/student-profile</code></li><li>자기 소개와 Java 출력 추가</li><li>변경 범위를 확인하고 두 번 커밋</li><li>그래프에서 main과 feature 위치 비교</li></ol></div><div class="lab-card evidence"><h3>제출 증거</h3><ul><li>현재 브랜치명</li><li>기능 브랜치의 커밋 2개</li><li><code>git log --graph</code> 결과</li><li>main에서 직접 작업하지 않는 이유</li></ul></div></div><pre class="lab-command">git switch main
+git switch -c feature/student-profile
+git status
+git add members/이름.md
+git commit -m "feat: add student profile"
+git log --oneline --graph --decorate --all</pre></section>
+
+<section class="lab-section"><h2>3시간차 — 원격 저장소와 Pull Request</h2><p>기능 브랜치를 GitHub에 올리고 동료의 리뷰를 받아 새 커밋으로 반영합니다. Windows의 HTTPS 인증은 Git Credential Manager 브라우저 로그인을 우선 사용합니다.</p><div class="lab-grid"><div class="lab-card"><h3>미션</h3><ol><li>원격 저장소 연결</li><li>기능 브랜치 push</li><li>목적·변경·검증을 적은 PR 생성</li><li>동료가 한 줄 리뷰 작성</li><li>리뷰 반영 커밋 추가</li></ol></div><div class="lab-card evidence"><h3>제출 증거</h3><ul><li><code>git remote -v</code></li><li>PR URL</li><li>동료 리뷰</li><li>리뷰 반영 커밋 해시</li><li>로컬 브랜치와 <code>origin/브랜치</code> 차이 설명</li></ul></div></div><pre class="lab-command">git remote -v
+git push -u origin feature/student-profile
+git fetch origin
+git branch -vv</pre><div class="lab-card checkpoint"><h3>PR 설명 템플릿</h3><p><strong>목적:</strong> 무엇을 해결했는가?<br><strong>변경:</strong> 어떤 파일과 동작이 바뀌었는가?<br><strong>검증:</strong> 무엇을 실행하고 확인했는가?</p></div></section>
+
+<section class="lab-section"><h2>4시간차 — 충돌을 합의하고 안전하게 복구하기</h2><p>두 학생이 같은 줄을 다르게 수정해 실제 충돌을 만듭니다. 표시를 지우는 것이 아니라 최종 내용에 합의하고 실행 결과까지 검증합니다.</p><img class="lab-visual clickable-img" src="assets/visuals/conflict-recovery.svg" alt="충돌 발생 후 status 확인, 충돌 표시 해석, 최종 내용 합의, add와 commit, 실행 검증으로 이어지는 안전한 해결 흐름"><div class="lab-grid"><div class="lab-card"><h3>미션</h3><ol><li>두 브랜치에서 README 같은 줄 수정</li><li>merge하여 충돌 발생</li><li><code>git status</code>로 충돌 파일 확인</li><li>두 변경을 비교하고 최종 내용 합의</li><li>add, commit 후 프로그램 실행</li></ol></div><div class="lab-card evidence"><h3>제출 증거</h3><ul><li>충돌 오류 메시지</li><li>충돌 표시가 있는 파일</li><li>합의한 최종 내용</li><li>해결 커밋</li><li>실행 또는 출력 검증 결과</li></ul></div></div><pre class="lab-command">git status
+# 충돌 표시를 읽고 최종 내용 결정
+git add README.md
+git commit -m "merge: resolve team introduction conflict"
+git status</pre><div class="lab-card danger"><h3>멈추고 확인할 명령</h3><p><code>git reset --hard</code>, <code>git clean -fd</code>, <code>git push --force</code>는 변경 또는 팀 이력을 잃게 할 수 있습니다. 실행 전에 사라지는 데이터, 백업 여부, 팀 저장소 영향부터 확인합니다.</p></div></section>
+
+<section class="lab-section"><h2>프로젝트 장애 대응표</h2><table class="lab-table"><thead><tr><th>증상</th><th>먼저 확인</th><th>안전한 첫 대응</th><th>완료 확인</th></tr></thead><tbody>
+<tr><td>잘못된 파일 stage</td><td><code>status</code>, <code>diff --staged</code></td><td><code>git restore --staged 파일</code></td><td>파일은 남고 stage만 해제</td></tr>
+<tr><td>커밋 전 변경 취소</td><td><code>git diff</code></td><td>정말 버릴 변경인지 확인 후 <code>git restore 파일</code></td><td>diff가 비어 있음</td></tr>
+<tr><td>push 거절</td><td><code>fetch</code>, <code>log --graph --all</code></td><td>원격 변경 확인 후 팀 규칙에 따라 pull/merge</td><td>테스트 후 push 성공</td></tr>
+<tr><td>merge conflict</td><td><code>git status</code></td><td>표시 해석 → 합의 → add → commit</td><td>표시 없음, 실행 성공</td></tr>
+<tr><td>공유 커밋 취소</td><td><code>git log</code></td><td><code>git revert 커밋</code></td><td>역방향 변경 새 커밋</td></tr>
+<tr><td>잘못된 브랜치 작업</td><td><code>branch --show-current</code>, <code>status</code></td><td>변경을 잃지 말고 새 브랜치 생성 또는 상태 공유</td><td>올바른 브랜치에 변경</td></tr>
+</tbody></table></section>
+
+<section class="lab-section"><h2>팀 Git 규칙</h2><div class="lab-grid"><div class="lab-card"><h3>항상 지킨다</h3><ul><li>작업 전 main 최신화</li><li>Issue·기능 단위 브랜치</li><li>작고 설명 가능한 커밋</li><li>PR에 목적·변경·검증 기록</li><li>충돌 해결 후 실행 검증</li></ul></div><div class="lab-card danger"><h3>혼자 결정하지 않는다</h3><ul><li>main 직접 push</li><li>force push</li><li>공유 브랜치 reset</li><li>충돌 상대 변경 삭제</li><li><code>.env</code>와 비밀정보 commit</li></ul></div></div></section>
+
+<section class="lab-section"><h2>완료 기준</h2><table class="lab-table"><thead><tr><th>단계</th><th>PASS 증거</th></tr></thead><tbody><tr><td>4시간 직후</td><td>기능 브랜치, 의미 있는 커밋 2개, PR, 동료 리뷰, 충돌 해결, stage 복구, 상태 설명</td></tr><tr><td>반복 3회 후</td><td>안내 없이 기본 루프 수행, push 거절 또는 충돌 해결, 리뷰 반영, 근거 있는 도움 요청</td></tr><tr><td>프로젝트 진입 전</td><td>Issue부터 병합까지 독립 수행, 비밀정보 제외, 안전한 복구, 실행 검증, Git 이력 설명</td></tr></tbody></table></section>
+
+<section class="lab-section source-list"><h2>공식 참고 자료</h2><p>기술 설명은 2026-09-02에 공식 문서로 확인했습니다.</p><ul><li><a href="https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git">GitHub Docs — Git Credential Manager</a></li><li><a href="https://git-scm.com/docs/git-switch">Git — git switch</a></li><li><a href="https://git-scm.com/docs/git-restore">Git — git restore</a></li><li><a href="https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/resolving-a-merge-conflict-using-the-command-line?platform=windows">GitHub Docs — 명령줄 충돌 해결</a></li><li><a href="https://docs.github.com/en/pull-requests/reference/pull-request-reviews">GitHub Docs — Pull Request 리뷰</a></li></ul></section>
+</main><script src="js/main.js"></script></body></html>

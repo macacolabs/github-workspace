@@ -212,12 +212,12 @@ a3f82bc feat: README.md 추가</span>
                     <div class="code-block terminal">
                         <div class="code-block-header"><span class="code-lang">Git Bash</span></div>
                         <pre><code><span class="comment"># 특정 커밋 상태로 이동 (탐색 목적)</span>
-<span class="prompt">$</span> git checkout HEAD~2
+<span class="prompt">$</span> git switch --detach HEAD~2
 <span class="output">Note: switching to 'HEAD~2'.
 You are in 'detached HEAD' state...</span>
 
 <span class="comment"># 다시 최신으로 돌아오기</span>
-<span class="prompt">$</span> git checkout main</code></pre>
+<span class="prompt">$</span> git switch main</code></pre>
                     </div>
                 </section>
 
@@ -314,10 +314,10 @@ You are in 'detached HEAD' state...</span>
                     <div class="cheatsheet-row"><code class="cheat-cmd">git show 커밋ID</code>
                         <div class="cheat-desc">특정 커밋 상세 정보</div>
                     </div>
-                    <div class="cheatsheet-row"><code class="cheat-cmd">git checkout HEAD~N</code>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git switch --detach HEAD~N</code>
                         <div class="cheat-desc">N번 이전 커밋으로 이동</div>
                     </div>
-                    <div class="cheatsheet-row"><code class="cheat-cmd">git checkout main</code>
+                    <div class="cheatsheet-row"><code class="cheat-cmd">git switch main</code>
                         <div class="cheat-desc">최신 상태로 복귀</div>
                     </div>
                 </div>
