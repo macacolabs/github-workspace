@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>기능 브랜치에서 안전하게 작업하기 | 프로젝트 Git 실습</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/labs.css"></head><body><div class="lab-layout"><aside class="lab-sidebar"><a class="lab-brand" href="../index.html">🌱 Git & GitHub</a><div class="lab-progress"><div class="lab-progress-row"><span>실습 진행률</span><span data-lab-progress-text>0 / 7 완료</span></div><div class="lab-progress-track"><div class="lab-progress-fill" data-lab-progress-fill></div></div></div><nav aria-label="프로젝트 실습"><ul class="lab-nav"><li><a href="index.html">실습 과정 홈</a></li><li><a data-module="01" class="" href="01-local-commits.html">01 상태와 커밋</a></li><li><a data-module="02" class="active" href="02-feature-branch.html">02 기능 브랜치</a></li><li><a data-module="03" class="" href="03-remote-sync.html">03 원격 동기화</a></li><li><a data-module="04" class="" href="04-conflict.html">04 충돌 해결</a></li><li><a data-module="05" class="" href="05-pull-request.html">05 PR 협업</a></li><li><a data-module="06" class="" href="06-troubleshooting.html">06 장애 대응</a></li><li><a data-module="07" class="" href="07-readiness-check.html">07 준비도 평가</a></li></ul></nav></aside><main class="lab-main"><div class="lab-eyebrow">MODULE 02 · 2시간차</div><h1 class="lab-title">기능 브랜치에서<br>안전하게 작업하기</h1><p class="lab-lead">최신 main에서 기능 브랜치를 만들고, 브랜치 포인터와 커밋 차이를 증거로 확인합니다.</p><div class="lab-tags"><span class="lab-tag">개인 실습</span><span class="lab-tag">switch</span><span class="lab-tag">commit graph</span></div>
+<section class="lab-section"><h2>문제 상황</h2><p>모든 학생이 main에서 직접 작업하면 미완성 코드와 충돌이 즉시 공유됩니다. 기능별 작업 공간을 만들고 main과 분리된 이력을 확인합니다.</p><img class="lab-visual" src="../assets/visuals/branch-pr-flow.svg" alt="main에서 기능 브랜치를 만들고 커밋과 PR을 거쳐 병합하는 흐름"></section>
+<section class="lab-section"><h2>시작 상태 확인</h2><pre class="lab-code">git status
+git branch --show-current
+git log --oneline --decorate -3</pre><div class="lab-box predict"><h3>예측</h3><p>새 브랜치를 만들면 기존 파일과 커밋은 사라질까요? HEAD는 어디를 가리킬까요?</p><textarea class="lab-evidence" aria-label="브랜치 생성 예상"></textarea></div></section>
+<section class="lab-section"><h2>미션 1 — 기능 브랜치</h2><ol><li>현재 main이 clean인지 확인합니다.</li><li>자기 이름을 사용한 기능 브랜치를 만듭니다.</li><li>members/이름.md를 작성하고 커밋합니다.</li><li>HelloTeam.java를 별도 커밋으로 수정합니다.</li></ol><pre class="lab-code">git switch main
+git status
+git switch -c feature/이름-profile
+git branch --show-current
+git add members/이름.md
+git commit -m "feat: add 이름 profile"
+git add src/HelloTeam.java
+git commit -m "feat: include 이름 in greeting"
+git log --oneline --graph --decorate --all</pre></section>
+<section class="lab-section"><h2>미션 2 — 브랜치 차이 읽기</h2><pre class="lab-code">git diff main..HEAD
+git log --oneline main..HEAD
+git switch main
+git log --oneline --decorate --all</pre><div class="lab-grid"><div class="lab-box check"><h3>Checkpoint</h3><p>main으로 이동했을 때 자기 소개 파일이 보이지 않아도 삭제된 것이 아닙니다. feature 브랜치 커밋에 존재합니다.</p></div><div class="lab-box evidence"><h3>증거</h3><p>main에는 없고 feature에만 있는 커밋 해시 두 개를 적습니다.</p><textarea class="lab-evidence" aria-label="브랜치 차이 증거"></textarea></div></div></section>
+<section class="lab-section"><h2>실패 재현 — 변경 중 브랜치 전환</h2><ol><li>feature 브랜치에서 README를 수정하되 커밋하지 않습니다.</li><li>다른 브랜치에도 같은 파일 변경이 있다고 가정하고 전환을 시도합니다.</li><li>Git이 전환을 거절하면 오류를 보존합니다.</li></ol><pre class="lab-code">git switch feature/이름-profile
+# README 수정 후
+git status
+git switch main</pre><div class="lab-box danger"><h3>금지</h3><p>전환이 안 된다고 <code>switch --discard-changes</code>나 <code>reset --hard</code>를 실행하지 않습니다. 변경을 유지할지, 커밋할지, 별도 브랜치로 옮길지 먼저 결정합니다.</p></div><details class="lab-details"><summary>막혔을 때 힌트 1</summary><div><p>오류가 발생하지 않았다면 두 브랜치에서 해당 파일 내용이 같아 안전하게 이동된 것입니다. 실습 목적은 오류를 억지로 만드는 것이 아니라 Git이 언제 데이터를 보호하는지 관찰하는 것입니다.</p></div></details></section>
+<section class="lab-section"><h2>선택과 병합</h2><p>미커밋 변경을 처리한 뒤 main으로 이동해 feature를 병합합니다. 병합 전 그래프와 병합 후 그래프를 비교합니다.</p><pre class="lab-code">git status
+git switch main
+git merge feature/이름-profile
+git log --oneline --graph --decorate --all
+git status</pre></section>
+<section class="lab-section"><h2>제출 증거와 Explain Gate</h2><table class="lab-table"><thead><tr><th>증거</th><th>PASS 기준</th></tr></thead><tbody><tr><td>기능 브랜치명</td><td>feature/작업 형태</td></tr><tr><td>브랜치 커밋 2개</td><td>목적별 분리</td></tr><tr><td>병합 전후 그래프</td><td>포인터 이동 설명</td></tr><tr><td>전환 시 관찰</td><td>Git의 데이터 보호 조건 설명</td></tr></tbody></table><textarea class="lab-evidence" aria-label="모듈 2 제출 증거"></textarea><h3>말로 설명</h3><ul><li>브랜치와 폴더 복사는 무엇이 다른가?</li><li>HEAD는 지금 무엇을 가리키는가?</li><li>main 직접 작업이 팀에 주는 위험은 무엇인가?</li></ul></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>버튼은 자기 기록입니다. 실제 PASS는 위 증거와 설명을 강사가 확인한 뒤 판정합니다.</p><button class="lab-btn primary" data-complete-module="02">이 모듈 완료하기</button><p class="lab-status-note">완료 상태는 현재 브라우저에 저장됩니다.</p></section><div class="lab-footer-nav"><a class="lab-btn" href="01-local-commits.html">← 상태와 커밋</a><a class="lab-btn primary" href="03-remote-sync.html">원격 동기화 →</a></div></main></div><script src="../js/labs.js"></script></body></html>

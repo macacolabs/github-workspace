@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pull Request로 설명하고 리뷰하기 | 프로젝트 Git 실습</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/labs.css"></head><body><div class="lab-layout"><aside class="lab-sidebar"><a class="lab-brand" href="../index.html">🌱 Git & GitHub</a><div class="lab-progress"><div class="lab-progress-row"><span>실습 진행률</span><span data-lab-progress-text>0 / 7 완료</span></div><div class="lab-progress-track"><div class="lab-progress-fill" data-lab-progress-fill></div></div></div><nav><ul class="lab-nav"><li><a href="index.html">실습 과정 홈</a></li><li><a data-module="01" class="" href="01-local-commits.html">01 상태와 커밋</a></li><li><a data-module="02" class="" href="02-feature-branch.html">02 기능 브랜치</a></li><li><a data-module="03" class="" href="03-remote-sync.html">03 원격 동기화</a></li><li><a data-module="04" class="" href="04-conflict.html">04 충돌 해결</a></li><li><a data-module="05" class="active" href="05-pull-request.html">05 PR 협업</a></li><li><a data-module="06" class="" href="06-troubleshooting.html">06 장애 대응</a></li><li><a data-module="07" class="" href="07-readiness-check.html">07 준비도 평가</a></li></ul></nav></aside><main class="lab-main"><div class="lab-eyebrow">MODULE 05</div><h1 class="lab-title">Pull Request로<br>설명하고 리뷰하기</h1><p class="lab-lead">기능 브랜치를 PR로 전달하고 구체적인 동료 리뷰를 새 커밋으로 반영한 뒤 병합합니다.</p><div class="lab-tags"><span class="lab-tag">2인 필수</span><span class="lab-tag">Pull Request</span><span class="lab-tag">리뷰 반영</span></div>
+<section class="lab-section"><h2>문제 상황</h2><p>PR은 “merge 해주세요” 버튼이 아닙니다. 작성자는 변경 목적과 검증을 설명하고, 리뷰어는 구체적인 근거로 변경을 확인합니다.</p><img class="lab-visual" src="../assets/visuals/branch-pr-flow.svg" alt="기능 브랜치 커밋, push, Pull Request 리뷰, main 병합 흐름"></section>
+<section class="lab-section"><h2>PR용 기능 준비</h2><ol><li>Issue에 작업 목적과 완료조건을 적습니다.</li><li>최신 main에서 기능 브랜치를 만듭니다.</li><li>members/이름.md와 Java 중 하나를 변경합니다.</li><li>실행 또는 파일 검증 후 push합니다.</li></ol><pre class="lab-code">git switch main
+git pull --no-rebase origin main
+git switch -c feature/이슈번호-profile
+# 작업
+git status
+git diff
+# 실행 검증
+git add 필요한-파일
+git commit -m "feat: 작업 목적"
+git push -u origin feature/이슈번호-profile</pre></section>
+<section class="lab-section"><h2>PR 작성</h2><div class="lab-box check"><h3>제목</h3><p>구현한 기능을 동사와 대상으로 표현합니다. “수정”, “완료”처럼 범위를 알 수 없는 제목은 피합니다.</p></div><pre class="lab-code">## 목적
+어떤 문제 또는 요구사항을 해결했는가?
+
+## 변경
+어떤 파일과 동작이 바뀌었는가?
+
+## 검증
+어떤 명령을 실행했고 결과는 무엇인가?
+
+## 확인 요청
+리뷰어가 특히 확인할 부분은 무엇인가?</pre><textarea class="lab-evidence" aria-label="PR 설명 초안" placeholder="실제 PR을 만들기 전에 초안을 작성하세요"></textarea></section>
+<section class="lab-section"><h2>리뷰어 미션</h2><ol><li>Files changed에서 변경 범위가 Issue와 일치하는지 봅니다.</li><li>관계없는 파일, 비밀정보, 생성 파일이 없는지 봅니다.</li><li>구체적인 한 줄에 질문 또는 수정 요청을 남깁니다.</li><li>검증 결과가 재현 가능한지 확인합니다.</li></ol><div class="lab-grid"><div class="lab-box danger"><h3>통과하지 않는 리뷰</h3><p>“좋습니다”, “확인”, “LGTM”만 작성</p></div><div class="lab-box evidence"><h3>통과하는 리뷰</h3><p>파일과 줄, 이유, 기대 결과가 포함된 질문 또는 제안</p></div></div><textarea class="lab-evidence" aria-label="리뷰 증거" placeholder="리뷰 URL 또는 리뷰 내용을 기록하세요"></textarea></section>
+<section class="lab-section"><h2>작성자 미션 — 리뷰 반영</h2><p>기존 커밋을 지우거나 force push하지 않고 새 커밋을 추가합니다.</p><pre class="lab-code">git switch feature/이슈번호-profile
+# 리뷰 내용 수정
+git diff
+# 실행 검증
+git add 필요한-파일
+git commit -m "fix: address profile review"
+git push</pre><div class="lab-checklist"><button class="lab-check" aria-pressed="false">리뷰 내용을 이해하고 답변했다</button><button class="lab-check" aria-pressed="false">수정을 새 커밋으로 남겼다</button><button class="lab-check" aria-pressed="false">검증 결과를 PR에 추가했다</button><button class="lab-check" aria-pressed="false">리뷰어가 다시 확인했다</button></div></section>
+<section class="lab-section"><h2>병합과 로컬 정리</h2><p>리뷰 승인과 검증 완료 후 GitHub에서 병합합니다. 이후 로컬 main을 최신화하고 병합된 기능 브랜치와 차이가 없는지 확인합니다.</p><pre class="lab-code">git switch main
+git pull --no-rebase origin main
+git log --oneline --graph --decorate -8
+git branch -d feature/이슈번호-profile
+git status</pre><div class="lab-box danger"><h3>브랜치 삭제 전</h3><p>PR이 실제로 병합됐고 main에 커밋이 들어왔는지 확인합니다. 삭제는 정리 단계이며 학습 완료 증거를 대신하지 않습니다.</p></div></section>
+<section class="lab-section"><h2>제출 증거와 Explain Gate</h2><table class="lab-table"><thead><tr><th>증거</th><th>PASS</th></tr></thead><tbody><tr><td>Issue URL</td><td>작업 목적과 완료조건</td></tr><tr><td>PR URL</td><td>목적·변경·검증 포함</td></tr><tr><td>동료 리뷰</td><td>파일·줄·이유·기대 결과</td></tr><tr><td>반영 커밋</td><td>새 커밋과 재검증</td></tr><tr><td>병합 후 main</td><td>최신 상태와 clean 작업 트리</td></tr></tbody></table><textarea class="lab-evidence" aria-label="모듈 5 증거"></textarea><h3>말로 설명</h3><ul><li>commit과 PR은 각각 어떤 단위인가?</li><li>리뷰 반영을 새 커밋으로 남기면 무엇이 좋은가?</li><li>Request changes가 실제 병합을 막으려면 저장소에 무엇이 필요한가?</li></ul></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>실제 PASS는 제출 증거와 설명 확인으로 판정합니다.</p><button class="lab-btn primary" data-complete-module="05">이 모듈 완료하기</button></section><div class="lab-footer-nav"><a class="lab-btn" href="04-conflict.html">← 충돌 해결</a><a class="lab-btn primary" href="06-troubleshooting.html">장애 대응 →</a></div></main></div><script src="../js/labs.js"></script></body></html>

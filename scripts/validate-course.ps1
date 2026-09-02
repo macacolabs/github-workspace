@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 $errors = [System.Collections.Generic.List[string]]::new()
 
-Write-Host '[1/4] Local links'
+Write-Host '[1/5] Local links'
 $htmlFiles = Get-ChildItem $repo -Recurse -Filter '*.html'
 foreach ($file in $htmlFiles) {
     $content = Get-Content -Raw $file.FullName
@@ -16,7 +16,7 @@ foreach ($file in $htmlFiles) {
     }
 }
 
-Write-Host '[2/4] SVG XML and accessibility'
+Write-Host '[2/5] SVG XML and accessibility'
 $svgFiles = Get-ChildItem (Join-Path $repo 'assets\visuals') -Filter '*.svg'
 foreach ($file in $svgFiles) {
     [xml]$svg = Get-Content -Raw $file.FullName
@@ -25,7 +25,7 @@ foreach ($file in $svgFiles) {
     }
 }
 
-Write-Host '[3/4] Java starter'
+Write-Host '[3/5] Java starter'
 $javaSource = Join-Path $repo 'labs\team-profile-starter\src\HelloTeam.java'
 $javac = Get-Command javac -ErrorAction SilentlyContinue
 if ($javac) {
@@ -46,7 +46,7 @@ if ($javac) {
     Write-Host 'SKIP: javac not found'
 }
 
-Write-Host '[4/4] Git branch and conflict rehearsal'
+Write-Host '[4/5] Git branch and conflict rehearsal'
 $temp = Join-Path ([System.IO.Path]::GetTempPath()) ('git-course-flow-' + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $temp | Out-Null
 try {
@@ -75,9 +75,26 @@ try {
     Remove-Item -LiteralPath $temp -Recurse -Force
 }
 
+Write-Host '[5/5] Complete lab course contract'
+$labPages = Get-ChildItem (Join-Path $repo 'labs') -Filter '*.html'
+if ($labPages.Count -ne 8) {
+    $errors.Add("Expected 8 lab pages including index, found $($labPages.Count)")
+}
+foreach ($module in $labPages | Where-Object Name -ne 'index.html') {
+    $content = Get-Content -Raw $module.FullName
+    if ($content -notmatch 'data-complete-module=') {
+        $errors.Add("Missing completion control: $($module.Name)")
+    }
+    if ($content -notmatch 'lab-evidence') {
+        $errors.Add("Missing evidence input: $($module.Name)")
+    }
+    if ($content -match 'instructor-(assessment|solutions)') {
+        $errors.Add("Student page exposes instructor material: $($module.Name)")
+    }
+}
+
 if ($errors.Count -gt 0) {
     $errors | ForEach-Object { Write-Error $_ }
     exit 1
 }
-Write-Host "PASS: html=$($htmlFiles.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow"
-
+Write-Host "PASS: html=$($htmlFiles.Count) labs=$($labPages.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow, lab contract"

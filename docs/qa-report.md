@@ -23,7 +23,7 @@
 
 ## Technical
 
-- HTML 로컬 참조: 11개 HTML PASS
+- HTML 로컬 참조: 19개 HTML PASS
 - SVG XML: 4개 PASS
 - SVG title, desc, HTML alt: PASS
 - Java starter 컴파일 및 실행: PASS
@@ -43,6 +43,11 @@
 - 이미지 확대 모달: PASS
 - Escape 키 모달 닫기: PASS
 - 콘솔 warning/error: 0
+- 학생 실습 과정: 과정 홈 1개 + 모듈 7개 PASS
+- 모듈별 증거 입력과 완료 컨트롤: PASS
+- 입력 내용 새로고침 후 저장: PASS
+- 모듈 완료 진행률 반영: PASS
+- 학생 페이지에서 강사용 해설 미노출: PASS
 
 ## 공식 문서 검증
 
