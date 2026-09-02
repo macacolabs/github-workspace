@@ -93,8 +93,26 @@ foreach ($module in $labPages | Where-Object Name -ne 'index.html') {
     }
 }
 
+$scenarioPages = Get-ChildItem (Join-Path $repo 'labs\scenarios') -Filter '*.html'
+if ($scenarioPages.Count -ne 6) {
+    $errors.Add("Expected 6 scenario pages including index, found $($scenarioPages.Count)")
+}
+foreach ($scenario in $scenarioPages) {
+    $content = Get-Content -Raw $scenario.FullName
+    if ($content -match '<textarea|<input|<form') {
+        $errors.Add("Scenario page contains a submission input: $($scenario.Name)")
+    }
+}
+$scenarioMatrix = Get-Content -Raw (Join-Path $repo 'docs\project-git-scenario-matrix.md')
+foreach ($id in 1..42) {
+    $scenarioId = 'S{0:d2}' -f $id
+    if ($scenarioMatrix -notmatch [regex]::Escape($scenarioId)) {
+        $errors.Add("Scenario matrix missing $scenarioId")
+    }
+}
+
 if ($errors.Count -gt 0) {
     $errors | ForEach-Object { Write-Error $_ }
     exit 1
 }
-Write-Host "PASS: html=$($htmlFiles.Count) labs=$($labPages.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow, no submission inputs"
+Write-Host "PASS: html=$($htmlFiles.Count) labs=$($labPages.Count) scenarios=$($scenarioPages.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow, no submission inputs"

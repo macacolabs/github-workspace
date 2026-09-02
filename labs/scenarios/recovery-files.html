@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>복구·파일·보안 상황</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../../css/labs.css"><link rel="stylesheet" href="../../css/scenarios.css"></head><body><main class="lab-main"><a class="lab-btn" href="index.html">← 상황 찾기</a><div class="lab-eyebrow">RECOVERY · SECURITY · WINDOWS</div><h1 class="lab-title">복구·파일·보안 상황</h1><section class="lab-section"><div class="situation-list"><article class="situation"><h3>공유된 잘못된 commit 취소</h3><pre class="lab-code">git show &lt;commit-hash&gt;
+git revert &lt;commit-hash&gt;
+# 프로젝트 테스트
+git status</pre><p>공유 이력을 이동하지 않고 반대 변경을 새 commit으로 남깁니다.</p></article><article class="situation"><h3>commit 또는 branch 분실</h3><pre class="lab-code">git reflog
+git show &lt;found-hash&gt;
+git switch -c rescue/recovered-work &lt;found-hash&gt;</pre><p>reset보다 rescue branch로 먼저 보존합니다.</p></article><article class="situation"><h3>stash 충돌 우려</h3><pre class="lab-code">git stash list
+git stash show -p stash@{0}
+git stash apply stash@{0}
+git status</pre><p>apply로 목록을 유지하고 완전히 복구된 뒤 drop합니다. untracked 파일은 기본 stash에 포함되지 않습니다.</p></article><article class="situation"><h3>비밀정보 commit/push</h3><div class="lab-box danger"><ol><li>추가 push를 중단합니다.</li><li>키·토큰을 즉시 폐기하고 교체합니다.</li><li>관리자에게 노출 범위를 보고합니다.</li><li>새 비밀은 저장소 밖으로 이동합니다.</li><li>관리자가 이력 정리와 재동기화를 결정합니다.</li></ol></div><p>파일 삭제 commit만으로 노출된 값이 안전해지지 않습니다.</p></article><article class="situation"><h3>대용량 파일 push 거절</h3><p>산출물이면 제외합니다. 제품 자산이면 팀 승인 후 Git LFS와 용량 정책을 정합니다.</p></article><article class="situation"><h3>모든 줄이 변경 표시</h3><p>줄바꿈 차이인지 확인하고 팀 규칙을 .gitattributes로 고정합니다. 정규화 commit은 기능 변경과 분리합니다.</p><pre class="lab-code">* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf</pre></article><article class="situation"><h3>대소문자 rename 미반영</h3><pre class="lab-code">git mv User.java User.tmp
+git mv User.tmp user.java
+git status</pre><p>Linux CI에서 import와 빌드를 확인합니다.</p></article><article class="situation"><h3>ignore인데 추적됨</h3><pre class="lab-code">git ls-files path/to/file
+git rm --cached path/to/file
+git status</pre><p>로컬 파일은 남기고 추적에서 제외합니다.</p></article></div></section><section class="lab-section"><h2>혼자 진행하지 않는 경계</h2><ul><li>공유 branch history 재작성</li><li>원격 branch force push·삭제</li><li>비밀정보 외부 노출</li><li>모든 팀원의 clone에 영향을 주는 대규모 이력 정리</li></ul></section></main></body></html>
+

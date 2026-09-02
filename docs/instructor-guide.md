@@ -1,5 +1,14 @@
 # Git & GitHub 프로젝트 투입 과정 강사용 운영안
 
+## 프로젝트 상황 훈련 운영
+
+- 기준 문서: `project-git-scenario-matrix.md`
+- 4시간 본 수업은 MUST 상황을 기존 7개 모듈에서 수행한다.
+- 이후 프로젝트 시간 시작 때 DRILL 상황 하나를 10분간 제시한다.
+- 답을 제출받지 않는다. 화면 공유로 조치 전후 `status`, `diff`, `log`와 판단 이유를 설명하게 한다.
+- REFERENCE 상황은 암기 평가하지 않는다. 실제 오류가 나면 `labs/scenarios/index.html`에서 증상으로 찾아 대응한다.
+- `reset --hard`, `clean -fd`, `push --force`, secret 노출은 학생 단독 해결 범위를 벗어난 안전 중단 신호다.
+
 ## 운영 원칙
 
 - 설명 직후 15~20분 학생 실습을 배치한다.

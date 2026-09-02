@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>작업·브랜치 상황</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../../css/labs.css"><link rel="stylesheet" href="../../css/scenarios.css"></head><body><main class="lab-main"><a class="lab-btn" href="index.html">← 상황 찾기</a><div class="lab-eyebrow">START · COMMIT · BRANCH</div><h1 class="lab-title">작업과 브랜치 상황</h1><section class="lab-section"><div class="situation-list"><article class="situation"><h3>not a git repository</h3><p><b>확인</b> Get-Location, git rev-parse --show-toplevel</p><p><b>대응</b> 기존 프로젝트면 저장소 폴더로 이동합니다. 새 프로젝트일 때만 git init합니다.</p><p class="stop"><b>중단</b> 상위·하위 폴더에 init을 반복하지 않습니다.</p></article><article class="situation"><h3>관계없는 파일까지 stage됨</h3><pre class="lab-code">git diff --staged
+git restore --staged path/to/file
+git add path/to/needed-file</pre><p>작업 파일은 그대로 두고 commit 대상에서만 제외합니다.</p></article><article class="situation"><h3>main에서 미commit 작업</h3><pre class="lab-code">git status
+git switch -c feature/payment-docs
+git status</pre><p>새 branch로 이동한 뒤 변경이 보존됐는지 확인합니다.</p></article><article class="situation"><h3>main에 이미 로컬 commit</h3><p>push 여부와 hash를 확인한 뒤 먼저 commit을 가리킬 rescue branch를 만듭니다.</p><pre class="lab-code">git switch -c feature/rescue-main-work
+git log --oneline -3</pre><p class="stop"><b>중단</b> branch를 만들기 전에 reset하지 않습니다.</p></article><article class="situation"><h3>branch 전환 거절</h3><p>완성 단위면 commit, 급한 임시 이동이면 이름 있는 stash를 사용합니다.</p><pre class="lab-code">git stash push -m "WIP: payment validation"
+git switch hotfix/login
+git stash list</pre></article><article class="situation"><h3>detached HEAD에서 작업</h3><pre class="lab-code">git status
+git log --oneline -5
+git switch -c rescue/detached-work</pre><p>이동하기 전 현재 commit에 branch 이름을 붙입니다.</p></article></div></section><section class="lab-section"><h2>10분 훈련</h2><p>main에서 파일을 수정하고 파일을 잃지 않은 채 feature branch로 이동합니다. 전후 status와 log --all로 성공을 설명합니다.</p></section></main></body></html>
+
