@@ -6,7 +6,7 @@ git switch -c feature/team-message-a
 # B는 feature/team-message-b 사용</pre></section>
 <section class="lab-section"><h2>충돌 만들기</h2><ol><li>A가 수정, 커밋, push, PR 병합을 완료합니다.</li><li>B가 자신의 변경을 먼저 커밋합니다.</li><li>B가 최신 main을 가져와 feature에 병합합니다.</li></ol><pre class="lab-code">git fetch origin
 git switch feature/team-message-b
-git merge origin/main</pre><div class="lab-box evidence"><h3>반드시 보존</h3><textarea class="lab-evidence" aria-label="충돌 오류 원문" placeholder="CONFLICT 메시지와 파일명을 기록하세요"></textarea></div></section>
+git merge origin/main</pre><div class="lab-box evidence"><h3>반드시 보존</h3></div></section>
 <section class="lab-section"><h2>상태와 표시 해석</h2><pre class="lab-code">git status
 git diff
 # README 안에서 다음 세 표시를 찾는다
@@ -22,4 +22,4 @@ java -cp src HelloTeam
 git status</pre><div class="lab-checklist"><button class="lab-check" aria-pressed="false">두 변경을 비교했다</button><button class="lab-check" aria-pressed="false">최종 내용에 합의했다</button><button class="lab-check" aria-pressed="false">충돌 표시가 남지 않았다</button><button class="lab-check" aria-pressed="false">실행 결과를 확인했다</button></div></section>
 <section class="lab-section"><h2>중단이 필요한 경우</h2><p>해결 방향이 틀렸거나 병합을 시작하면 안 되는 브랜치였다면 변경을 더 만들기 전에 상태를 공유합니다. 병합 전 상태로 돌아가야 한다는 팀 합의가 있을 때만 다음을 사용합니다.</p><pre class="lab-code">git merge --abort
 git status</pre><p><code>merge --abort</code>가 실패할 수 있으므로 병합 전 미커밋 변경을 남기지 않는 것이 중요합니다.</p></section>
-<section class="lab-section"><h2>제출 증거와 Explain Gate</h2><table class="lab-table"><thead><tr><th>증거</th><th>PASS</th></tr></thead><tbody><tr><td>충돌 오류 원문</td><td>파일과 원인 식별</td></tr><tr><td>충돌 표시 화면</td><td>ours/theirs를 현재 병합 방향으로 설명</td></tr><tr><td>합의 내용</td><td>어느 변경을 왜 남겼는지 기록</td></tr><tr><td>해결 커밋</td><td>표시 없음, 실행 성공, clean 상태</td></tr></tbody></table><textarea class="lab-evidence" aria-label="모듈 4 증거"></textarea></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>실제 PASS는 제출 증거와 설명 확인으로 판정합니다.</p><button class="lab-btn primary" data-complete-module="04">이 모듈 완료하기</button></section><div class="lab-footer-nav"><a class="lab-btn" href="03-remote-sync.html">← 원격 동기화</a><a class="lab-btn primary" href="05-pull-request.html">PR 협업 →</a></div></main></div><script src="../js/labs.js"></script></body></html>
+<section class="lab-section"><h2>실습 확인과 Explain Gate</h2><table class="lab-table"><thead><tr><th>확인할 결과</th><th>PASS</th></tr></thead><tbody><tr><td>충돌 오류 원문</td><td>파일과 원인 식별</td></tr><tr><td>충돌 표시 화면</td><td>ours/theirs를 현재 병합 방향으로 설명</td></tr><tr><td>합의 내용</td><td>어느 변경을 왜 남겼는지 기록</td></tr><tr><td>해결 커밋</td><td>표시 없음, 실행 성공, clean 상태</td></tr></tbody></table></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>실제 PASS는 Git 상태와 설명 과정으로 판정합니다.</p><button class="lab-btn primary" data-complete-module="04">이 모듈 완료하기</button></section><div class="lab-footer-nav"><a class="lab-btn" href="03-remote-sync.html">← 원격 동기화</a><a class="lab-btn primary" href="05-pull-request.html">PR 협업 →</a></div></main></div><script src="../js/labs.js"></script></body></html>

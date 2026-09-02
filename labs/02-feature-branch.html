@@ -2,7 +2,7 @@
 <section class="lab-section"><h2>문제 상황</h2><p>모든 학생이 main에서 직접 작업하면 미완성 코드와 충돌이 즉시 공유됩니다. 기능별 작업 공간을 만들고 main과 분리된 이력을 확인합니다.</p><img class="lab-visual" src="../assets/visuals/branch-pr-flow.svg" alt="main에서 기능 브랜치를 만들고 커밋과 PR을 거쳐 병합하는 흐름"></section>
 <section class="lab-section"><h2>시작 상태 확인</h2><pre class="lab-code">git status
 git branch --show-current
-git log --oneline --decorate -3</pre><div class="lab-box predict"><h3>예측</h3><p>새 브랜치를 만들면 기존 파일과 커밋은 사라질까요? HEAD는 어디를 가리킬까요?</p><textarea class="lab-evidence" aria-label="브랜치 생성 예상"></textarea></div></section>
+git log --oneline --decorate -3</pre><div class="lab-box predict"><h3>예측</h3><p>새 브랜치를 만들면 기존 파일과 커밋은 사라질까요? HEAD는 어디를 가리킬까요?</p></div></section>
 <section class="lab-section"><h2>미션 1 — 기능 브랜치</h2><ol><li>현재 main이 clean인지 확인합니다.</li><li>자기 이름을 사용한 기능 브랜치를 만듭니다.</li><li>members/이름.md를 작성하고 커밋합니다.</li><li>HelloTeam.java를 별도 커밋으로 수정합니다.</li></ol><pre class="lab-code">git switch main
 git status
 git switch -c feature/이름-profile
@@ -15,7 +15,7 @@ git log --oneline --graph --decorate --all</pre></section>
 <section class="lab-section"><h2>미션 2 — 브랜치 차이 읽기</h2><pre class="lab-code">git diff main..HEAD
 git log --oneline main..HEAD
 git switch main
-git log --oneline --decorate --all</pre><div class="lab-grid"><div class="lab-box check"><h3>Checkpoint</h3><p>main으로 이동했을 때 자기 소개 파일이 보이지 않아도 삭제된 것이 아닙니다. feature 브랜치 커밋에 존재합니다.</p></div><div class="lab-box evidence"><h3>증거</h3><p>main에는 없고 feature에만 있는 커밋 해시 두 개를 적습니다.</p><textarea class="lab-evidence" aria-label="브랜치 차이 증거"></textarea></div></div></section>
+git log --oneline --decorate --all</pre><div class="lab-grid"><div class="lab-box check"><h3>Checkpoint</h3><p>main으로 이동했을 때 자기 소개 파일이 보이지 않아도 삭제된 것이 아닙니다. feature 브랜치 커밋에 존재합니다.</p></div><div class="lab-box evidence"><h3>확인 결과</h3><p>main에는 없고 feature에만 있는 커밋 해시 두 개를 찾아 말합니다.</p></div></div></section>
 <section class="lab-section"><h2>실패 재현 — 변경 중 브랜치 전환</h2><ol><li>feature 브랜치에서 README를 수정하되 커밋하지 않습니다.</li><li>다른 브랜치에도 같은 파일 변경이 있다고 가정하고 전환을 시도합니다.</li><li>Git이 전환을 거절하면 오류를 보존합니다.</li></ol><pre class="lab-code">git switch feature/이름-profile
 # README 수정 후
 git status
@@ -25,4 +25,4 @@ git switch main
 git merge feature/이름-profile
 git log --oneline --graph --decorate --all
 git status</pre></section>
-<section class="lab-section"><h2>제출 증거와 Explain Gate</h2><table class="lab-table"><thead><tr><th>증거</th><th>PASS 기준</th></tr></thead><tbody><tr><td>기능 브랜치명</td><td>feature/작업 형태</td></tr><tr><td>브랜치 커밋 2개</td><td>목적별 분리</td></tr><tr><td>병합 전후 그래프</td><td>포인터 이동 설명</td></tr><tr><td>전환 시 관찰</td><td>Git의 데이터 보호 조건 설명</td></tr></tbody></table><textarea class="lab-evidence" aria-label="모듈 2 제출 증거"></textarea><h3>말로 설명</h3><ul><li>브랜치와 폴더 복사는 무엇이 다른가?</li><li>HEAD는 지금 무엇을 가리키는가?</li><li>main 직접 작업이 팀에 주는 위험은 무엇인가?</li></ul></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>버튼은 자기 기록입니다. 실제 PASS는 위 증거와 설명을 강사가 확인한 뒤 판정합니다.</p><button class="lab-btn primary" data-complete-module="02">이 모듈 완료하기</button><p class="lab-status-note">완료 상태는 현재 브라우저에 저장됩니다.</p></section><div class="lab-footer-nav"><a class="lab-btn" href="01-local-commits.html">← 상태와 커밋</a><a class="lab-btn primary" href="03-remote-sync.html">원격 동기화 →</a></div></main></div><script src="../js/labs.js"></script></body></html>
+<section class="lab-section"><h2>실습 확인과 Explain Gate</h2><table class="lab-table"><thead><tr><th>확인할 결과</th><th>PASS 기준</th></tr></thead><tbody><tr><td>기능 브랜치명</td><td>feature/작업 형태</td></tr><tr><td>브랜치 커밋 2개</td><td>목적별 분리</td></tr><tr><td>병합 전후 그래프</td><td>포인터 이동 설명</td></tr><tr><td>전환 시 관찰</td><td>Git의 데이터 보호 조건 설명</td></tr></tbody></table><h3>말로 설명</h3><ul><li>브랜치와 폴더 복사는 무엇이 다른가?</li><li>HEAD는 지금 무엇을 가리키는가?</li><li>main 직접 작업이 팀에 주는 위험은 무엇인가?</li></ul></section><section class="lab-section"><h2>모듈 완료 확인</h2><p>버튼은 자기 기록입니다. 실제 PASS는 위 실행 결과와 설명을 강사가 확인한 뒤 판정합니다.</p><button class="lab-btn primary" data-complete-module="02">이 모듈 완료하기</button><p class="lab-status-note">완료 상태는 현재 브라우저에 저장됩니다.</p></section><div class="lab-footer-nav"><a class="lab-btn" href="01-local-commits.html">← 상태와 커밋</a><a class="lab-btn primary" href="03-remote-sync.html">원격 동기화 →</a></div></main></div><script src="../js/labs.js"></script></body></html>

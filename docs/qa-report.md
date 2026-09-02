@@ -14,7 +14,7 @@
 
 ## Education
 
-- 각 시간에 미션과 Git 증거 존재: PASS
+- 각 시간에 미션과 Git 상태 확인 존재: PASS
 - 결과 예측, 실행, 관찰, 실패, 복구, 설명 흐름: PASS
 - 2인 충돌과 PR 리뷰 포함: PASS
 - 기초, 적용, 독립 수행 완료기준 분리: PASS
@@ -44,8 +44,8 @@
 - Escape 키 모달 닫기: PASS
 - 콘솔 warning/error: 0
 - 학생 실습 과정: 과정 홈 1개 + 모듈 7개 PASS
-- 모듈별 증거 입력과 완료 컨트롤: PASS
-- 입력 내용 새로고침 후 저장: PASS
+- 학생 답안·제출 입력란 없음: PASS
+- Git Bash와 GitHub에서 직접 상태 확인: PASS
 - 모듈 완료 진행률 반영: PASS
 - 학생 페이지에서 강사용 해설 미노출: PASS
 

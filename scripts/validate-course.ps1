@@ -85,8 +85,8 @@ foreach ($module in $labPages | Where-Object Name -ne 'index.html') {
     if ($content -notmatch 'data-complete-module=') {
         $errors.Add("Missing completion control: $($module.Name)")
     }
-    if ($content -notmatch 'lab-evidence') {
-        $errors.Add("Missing evidence input: $($module.Name)")
+    if ($content -match '<textarea|lab-evidence') {
+        $errors.Add("Student module still contains submission input: $($module.Name)")
     }
     if ($content -match 'instructor-(assessment|solutions)') {
         $errors.Add("Student page exposes instructor material: $($module.Name)")
@@ -97,4 +97,4 @@ if ($errors.Count -gt 0) {
     $errors | ForEach-Object { Write-Error $_ }
     exit 1
 }
-Write-Host "PASS: html=$($htmlFiles.Count) labs=$($labPages.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow, lab contract"
+Write-Host "PASS: html=$($htmlFiles.Count) labs=$($labPages.Count) svg=$($svgFiles.Count) links, visuals, starter, conflict flow, no submission inputs"
