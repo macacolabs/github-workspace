@@ -1,8 +1,0 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>충돌 상황</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../../css/labs.css"><link rel="stylesheet" href="../../css/scenarios.css"></head><body><main class="lab-main"><a class="lab-btn" href="index.html">← 상황 찾기</a><div class="lab-eyebrow">MERGE · CONFLICT</div><h1 class="lab-title">충돌 상황</h1><p class="lab-lead">충돌 해결은 marker 삭제가 아니라 두 변경의 의도를 확인해 최종 결과를 결정하는 작업입니다.</p><section class="lab-section"><h2>공통 절차</h2><ol><li>status에서 충돌 종류와 파일을 확인합니다.</li><li>양쪽 변경의 목적과 담당자를 확인합니다.</li><li>최종 내용을 편집하고 marker를 제거합니다.</li><li>add 후 빌드·테스트·실행합니다.</li><li>commit 후 clean 상태를 확인합니다.</li></ol><pre class="lab-code">git status
-git diff
-rg "^(<<<<<<<|=======|>>>>>>>)"
-git add path/to/resolved-file
-git commit</pre></section><section class="lab-section"><div class="situation-list"><article class="situation"><h3>같은 줄 충돌</h3><p>한쪽을 기계적으로 고르지 말고 요구사항에 맞는 최종 내용을 작성합니다.</p></article><article class="situation"><h3>modify/delete</h3><p>파일 필요 여부를 담당자와 결정합니다. 유지면 add, 삭제면 git rm으로 기록합니다.</p></article><article class="situation"><h3>add/add</h3><p>내용을 합치거나 역할별 이름으로 분리하고 import와 링크를 검증합니다.</p></article><article class="situation"><h3>병합 중단</h3><pre class="lab-code">git status
-git merge --abort
-git status</pre><p>시작 전 변경이 있었다면 보존 여부부터 확인합니다.</p></article><article class="situation"><h3>lock 파일</h3><p>manifest 의도를 합의하고 같은 패키지 도구 버전으로 재생성합니다. 숫자를 손으로 합치지 않습니다.</p></article><article class="situation"><h3>binary 파일</h3><p>파일 소유자와 기준본을 정하고 필요하면 양쪽을 다른 이름으로 보존합니다.</p></article></div></section></main></body></html>
-
