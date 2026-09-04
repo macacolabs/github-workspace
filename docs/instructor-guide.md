@@ -27,7 +27,7 @@
 
 ### 1시간차
 
-status, diff, diff --staged를 구분하고 README와 Java 변경을 분리해 커밋한다. 비밀정보 값을 실제로 만들거나 공유하지 않는다.
+status, diff, diff --staged를 구분하고 README와 team.md 변경을 분리해 커밋한다. 비밀정보 값을 실제로 만들거나 공유하지 않는다.
 
 ### 2시간차
 

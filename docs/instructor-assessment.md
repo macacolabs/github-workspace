@@ -21,10 +21,10 @@
 ### 01 상태와 커밋
 
 - status, diff, diff --staged의 대상을 구분한다.
-- README와 Java 변경이 목적별 커밋으로 분리됐다.
+- README와 team.md 변경이 목적별 커밋으로 분리됐다.
 - .env, class, IDE 파일이 추적되지 않는다.
 - restore --staged 후 작업 파일은 보존된다.
-- Java 실행 결과가 소스와 일치한다.
+- team.md의 문장과 요구사항이 일치하고 충돌 표시가 없다.
 
 ### 02 기능 브랜치
 
@@ -75,7 +75,7 @@
 | main 최신화 | fetch 또는 pull 전후 근거 | |
 | 기능 브랜치 | 올바른 이름과 시작 commit | |
 | 작은 commit | 문서와 코드 변경 분리 | |
-| 검증 | Java compile/run 성공 | |
+| 검증 | Markdown 내용·누락·충돌 표시 확인 | |
 | push | 원격 feature 존재 | |
 | PR | 목적·변경·검증 | |
 | 리뷰 | 구체적인 동료 피드백 | |
@@ -104,4 +104,3 @@
 7. 문제 발생 시 근거 있는 도움 요청
 
 3회 연속 통과하면 프로젝트 Git 독립 수행 PASS로 기록한다.
-

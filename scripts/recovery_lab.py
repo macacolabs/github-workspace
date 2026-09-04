@@ -19,6 +19,12 @@ def git(path, *args, ok=True):
         raise RuntimeError(result.stderr + result.stdout)
     return result
 
+def require(condition):
+    """Checks remain active even with python -O; never hide fixture operations."""
+    if not condition:
+        raise RuntimeError("Recovery scenario expectation failed")
+
+
 def write(path, name, text):
     (path / name).write_text(text, encoding="utf-8")
 
@@ -33,8 +39,12 @@ def prepare(mode):
     git(repo, "init", "-b", "main")
     git(repo, "config", "user.name", "Practice Student")
     git(repo, "config", "user.email", "practice@example.invalid")
+    # Persist isolation so student commands use the same settings as the fixture.
+    git(repo, "config", "core.autocrlf", "false")
+    git(repo, "config", "commit.gpgsign", "false")
+    git(repo, "config", "core.hooksPath", str(repo / ".no-hooks"))
     write(repo, "README.md", "team=base\n")
-    write(repo, "notes.txt", "note=base\n")
+    write(repo, "notes.md", "note=base\n")
     write(repo, ".gitignore", "build/\n")
     commit(repo, "docs: base")
     base = git(repo, "rev-parse", "HEAD").stdout.strip()
@@ -42,15 +52,15 @@ def prepare(mode):
         write(repo, "README.md", "team=profile\n")
         git(repo, "add", "README.md")
         write(repo, "README.md", "team=profile-v2\n")
-        write(repo, "notes.txt", "note=unrelated\n")
-        git(repo, "add", "notes.txt")
-        write(repo, "draft.txt", "draft=keep\n")
+        write(repo, "notes.md", "note=unrelated\n")
+        git(repo, "add", "notes.md")
+        write(repo, "draft.md", "draft=keep\n")
     elif mode == "branch":
         git(repo, "switch", "-c", "feature/profile")
         write(repo, "README.md", "team=feature\n")
         commit(repo, "feat: profile")
         write(repo, "README.md", "team=unfinished\n")
-        assert git(repo, "switch", "main", ok=False).returncode != 0
+        require(git(repo, "switch", "main", ok=False).returncode != 0)
     elif mode == "committed":
         write(repo, "README.md", "team=accidental-main\n")
         commit(repo, "feat: committed on wrong branch")
@@ -65,13 +75,13 @@ def prepare(mode):
         git(root, "clone", str(remote), str(peer))
         git(peer, "config", "user.name", "Practice Peer")
         git(peer, "config", "user.email", "peer@example.invalid")
-        write(peer, "peer.txt", "peer=keep\n")
+        write(peer, "peer.md", "peer=keep\n")
         commit(peer, "docs: peer update")
         git(peer, "push")
-        write(repo, "local.txt", "local=keep\n")
+        write(repo, "local.md", "local=keep\n")
         commit(repo, "docs: local update")
-        write(repo, "notes.txt", "note=unfinished\n")
-        assert git(repo, "push", ok=False).returncode != 0
+        write(repo, "notes.md", "note=unfinished\n")
+        require(git(repo, "push", ok=False).returncode != 0)
     elif mode in ("conflict", "delete-conflict"):
         git(repo, "switch", "-c", "feature/a")
         write(repo, "README.md", "team=A\n")
@@ -83,10 +93,10 @@ def prepare(mode):
         else:
             git(repo, "rm", "README.md")
         commit(repo, "docs: B")
-        assert git(repo, "merge", "feature/a", ok=False).returncode != 0
+        require(git(repo, "merge", "feature/a", ok=False).returncode != 0)
     elif mode == "stash":
-        write(repo, "notes.txt", "note=unfinished\n")
-        write(repo, "draft.txt", "draft=keep\n")
+        write(repo, "notes.md", "note=unfinished\n")
+        write(repo, "draft.md", "draft=keep\n")
     elif mode == "lost":
         git(repo, "switch", "--detach", "HEAD")
         write(repo, "README.md", "team=lost-work\n")
@@ -101,68 +111,68 @@ def prepare(mode):
 def verify(mode):
     repo = prepare(mode)
     if mode == "staged":
-        assert git(repo, "status", "--short").stdout.startswith("MM README.md")
-        git(repo, "restore", "--staged", "notes.txt")
+        require(git(repo, "status", "--short").stdout.startswith("MM README.md"))
+        git(repo, "restore", "--staged", "notes.md")
         git(repo, "add", "README.md")
         git(repo, "commit", "-m", "docs: profile only")
-        assert "notes.txt" not in git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").stdout
-        assert (repo / "draft.txt").exists()
-        assert (repo / "notes.txt").read_text() == "note=unrelated\n"
+        require("notes.md" not in git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").stdout)
+        require((repo / "draft.md").exists())
+        require((repo / "notes.md").read_text() == "note=unrelated\n")
     elif mode == "branch":
         git(repo, "stash", "push", "-m", "profile WIP")
         git(repo, "switch", "main")
         git(repo, "switch", "feature/profile")
         git(repo, "stash", "apply", "stash@{0}")
-        assert (repo / "README.md").read_text() == "team=unfinished\n"
-        assert git(repo, "stash", "list").stdout
+        require((repo / "README.md").read_text() == "team=unfinished\n")
+        require(git(repo, "stash", "list").stdout)
     elif mode == "committed":
         tip = git(repo, "rev-parse", "HEAD").stdout.strip()
         git(repo, "switch", "-c", "feature/rescued")
         git(repo, "branch", "-f", "main", "practice-base")
-        assert git(repo, "rev-parse", "main").stdout == git(repo, "rev-parse", "practice-base").stdout
-        assert git(repo, "rev-parse", "HEAD").stdout.strip() == tip
+        require(git(repo, "rev-parse", "main").stdout == git(repo, "rev-parse", "practice-base").stdout)
+        require(git(repo, "rev-parse", "HEAD").stdout.strip() == tip)
     elif mode == "remote":
         git(repo, "stash", "push", "-m", "local WIP")
         git(repo, "fetch", "origin")
-        assert git(repo, "rev-list", "--left-right", "--count", "HEAD...origin/main").stdout.strip() == "1\t1"
+        require(git(repo, "rev-list", "--left-right", "--count", "HEAD...origin/main").stdout.strip() == "1\t1")
         git(repo, "merge", "--no-edit", "origin/main")
         git(repo, "push")
         git(repo, "stash", "apply", "stash@{0}")
-        assert (repo / "peer.txt").exists() and (repo / "local.txt").exists()
-        assert (repo / "notes.txt").read_text() == "note=unfinished\n"
-        assert git(repo, "rev-parse", "HEAD").stdout == git(repo, "rev-parse", "origin/main").stdout
+        require((repo / "peer.md").exists() and (repo / "local.md").exists())
+        require((repo / "notes.md").read_text() == "note=unfinished\n")
+        require(git(repo, "rev-parse", "HEAD").stdout == git(repo, "rev-parse", "origin/main").stdout)
     elif mode == "conflict":
         tip = git(repo, "rev-parse", "HEAD").stdout
         git(repo, "merge", "--abort")
-        assert git(repo, "rev-parse", "HEAD").stdout == tip
-        assert not git(repo, "status", "--porcelain").stdout
-        assert git(repo, "merge", "feature/a", ok=False).returncode != 0
+        require(git(repo, "rev-parse", "HEAD").stdout == tip)
+        require(not git(repo, "status", "--porcelain").stdout)
+        require(git(repo, "merge", "feature/a", ok=False).returncode != 0)
         write(repo, "README.md", "team=A+B\n")
         commit(repo, "merge: agreed team")
-        assert len(git(repo, "rev-list", "--parents", "-n", "1", "HEAD").stdout.split()) == 3
+        require(len(git(repo, "rev-list", "--parents", "-n", "1", "HEAD").stdout.split()) == 3)
     elif mode == "delete-conflict":
         # Team decides the file is still required, so retain A's content.
-        assert (repo / "README.md").read_text() == "team=A\n"
+        require((repo / "README.md").read_text() == "team=A\n")
         git(repo, "add", "README.md")
         git(repo, "commit", "-m", "merge: retain team description")
-        assert not git(repo, "status", "--porcelain").stdout
+        require(not git(repo, "status", "--porcelain").stdout)
     elif mode == "stash":
         git(repo, "stash", "push", "-u", "-m", "profile WIP")
-        assert not (repo / "draft.txt").exists()
+        require(not (repo / "draft.md").exists())
         git(repo, "stash", "apply", "stash@{0}")
-        assert (repo / "draft.txt").read_text() == "draft=keep\n"
-        assert (repo / "notes.txt").read_text() == "note=unfinished\n"
+        require((repo / "draft.md").read_text() == "draft=keep\n")
+        require((repo / "notes.md").read_text() == "note=unfinished\n")
         git(repo, "stash", "drop", "stash@{0}")
-        assert not git(repo, "stash", "list").stdout
+        require(not git(repo, "stash", "list").stdout)
     elif mode == "lost":
         entries = git(repo, "reflog", "--format=%H %gs").stdout.splitlines()
         found = next(line.split()[0] for line in entries if "feat: detached work" in line)
         git(repo, "switch", "-c", "rescue/recovered", found)
-        assert (repo / "README.md").read_text() == "team=lost-work\n"
+        require((repo / "README.md").read_text() == "team=lost-work\n")
     elif mode == "shared":
         old = git(repo, "rev-parse", "HEAD").stdout.strip()
         git(repo, "revert", "--no-edit", "HEAD")
-        assert (repo / "README.md").read_text() == "team=base\n"
+        require((repo / "README.md").read_text() == "team=base\n")
         git(repo, "merge-base", "--is-ancestor", old, "HEAD")
     print("PASS", mode, repo)
 

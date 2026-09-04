@@ -25,8 +25,8 @@ foreach ($file in $svgFiles) {
     }
 }
 
-Write-Host '[3/5] Java starter'
-$javaSource = Join-Path $repo 'labs\team-profile-starter\src\HelloTeam.java'
+Write-Host '[3/5] Optional legacy Java example (not a student prerequisite)'
+$javaSource = Join-Path $repo 'examples\optional-java\HelloTeam.java'
 $javac = Get-Command javac -ErrorAction SilentlyContinue
 if ($javac) {
     $build = Join-Path ([System.IO.Path]::GetTempPath()) ('git-course-java-' + [guid]::NewGuid())
@@ -94,6 +94,16 @@ foreach ($module in $labPages | Where-Object Name -ne 'index.html') {
 }
 
 Write-Host '[6/6] Recovery learning contract and 9 isolated rehearsals'
+python -B (Join-Path $PSScriptRoot 'verify_review_regressions.py')
+if ($LASTEXITCODE -ne 0) { $errors.Add('Review regression checks failed') }
+python -B (Join-Path $PSScriptRoot 'verify_independent_practice.py')
+if ($LASTEXITCODE -ne 0) { $errors.Add('Independent diagnosis preparation failed') }
+python -B (Join-Path $PSScriptRoot 'verify_markdown_practice.py')
+if ($LASTEXITCODE -ne 0) { $errors.Add('Direct Markdown practice failed') }
+python -B (Join-Path $PSScriptRoot 'verify_learning_path.py')
+if ($LASTEXITCODE -ne 0) { $errors.Add('Module 01 to 02 learning path failed') }
+python -B -O (Join-Path $PSScriptRoot 'recovery_lab.py') --verify
+if ($LASTEXITCODE -ne 0) { $errors.Add('Optimized Python recovery rehearsal failed') }
 python (Join-Path $PSScriptRoot 'validate_recovery.py')
 if ($LASTEXITCODE -ne 0) { $errors.Add('Recovery learning contract failed') }
 python (Join-Path $PSScriptRoot 'recovery_lab.py') --verify

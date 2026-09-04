@@ -19,7 +19,7 @@
 - .gitignore는 이미 추적된 파일을 자동으로 추적 해제하지 않는다.
 
 정상 결과:
-- README와 Java가 서로 다른 commit
+- README와 team.md가 서로 다른 commit
 - .class와 .env가 status에 나타나지 않음
 - 최종 Working Tree clean
 
@@ -85,4 +85,3 @@ force push는 정답으로 인정하지 않는다.
 - origin/main이 마지막으로 갱신된 시점은?
 - 이 PR에서 관계없는 변경은 없는가?
 - 지금 명령이 실패하면 어떤 데이터가 보존되는가?
-

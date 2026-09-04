@@ -6,6 +6,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 import xml.etree.ElementTree as ET
+import re
+from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -38,6 +40,17 @@ for path in ROOT.rglob("*.html"):
     pages[path.resolve()] = page
 
 errors = []
+for path in (ROOT / 'labs').rglob('*.html'):
+    source = path.read_text(encoding='utf-8-sig')
+    if re.search(r'python scripts/|javac |java -cp|recovery-kit\.zip', source):
+        errors.append(f'Student runtime dependency returned: {path.name}')
+with ZipFile(ROOT / 'labs/team-profile-starter.zip') as starter:
+    expected = {'README.md', 'team.md', '.gitignore', 'members/.gitkeep'}
+    if set(starter.namelist()) != expected:
+        errors.append('Markdown starter manifest mismatch')
+    for name in expected:
+        if starter.read(name) != (ROOT / 'labs/team-profile-starter' / name).read_bytes():
+            errors.append(f'Stale starter member: {name}')
 recovery = sorted((ROOT / "labs/recovery").glob("*.html"))
 if len(recovery) != 8:
     errors.append("Expected 8 recovery pages")

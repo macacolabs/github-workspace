@@ -2,7 +2,29 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>잘못된 브랜치의 작업을 잃지 않고 옮기기 | Git 복구 실습</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../../css/labs.css"><link rel="stylesheet" href="../../css/recovery.css"></head>
 <body><a class="recovery-skip" href="#lesson">본문으로 건너뛰기</a><div class="lab-layout"><aside class="lab-sidebar"><a class="lab-brand" href="../index.html">← 기존 7개 실습</a><nav aria-label="원리와 복구"><ul class="lab-nav"><li><a href="index.html">학습 순서·연습 환경</a></li><li><a href="01-state.html">상태·스테이징</a></li><li><a href="02-branch.html">브랜치·HEAD</a></li><li><a href="03-sync.html">원격·분기된 이력</a></li><li><a href="04-conflict.html">병합·충돌·중단</a></li><li><a href="05-recovery.html">revert·stash·reflog</a></li><li><a href="06-pr-files.html">PR·파일·안전 경계</a></li><li><a href="07-independent.html">독립 수행 훈련</a></li></ul></nav></aside><main id="lesson" class="lab-main"><div class="lab-eyebrow">원리 → 상태 → 판단 → 복구 → 검증</div><h1 class="lab-title">잘못된 브랜치의 작업을 잃지 않고 옮기기</h1><p class="lab-lead">main에서 기능을 완성해 커밋했지만 아직 누구에게도 공유하지 않았습니다. 작업을 살리면서 main을 원래 기준으로 돌려야 합니다. 먼저 commit을 보존할 이름부터 만듭니다.</p><nav class="recovery-contents" aria-label="단원 내 이동"><a href="#logic">내부 원리</a><a href="#practice">실습</a><a href="#check">검증</a></nav>
 <section class="lab-section" id="logic"><h2>내부에서는 어떤 일이 일어날까?</h2><p>브랜치는 폴더가 아니라 커밋을 가리키는 참조입니다. 일반적인 HEAD는 현재 브랜치를 가리키고, commit하면 그 브랜치가 새 커밋으로 이동합니다. 다른 브랜치는 자동으로 이동하지 않습니다.</p><p>새 브랜치를 현재 커밋에 만들면 두 이름이 같은 커밋을 가리킵니다. 파일을 복사하지 않고도 커밋을 잃지 않을 안전한 기준점을 확보할 수 있습니다.</p><p>미커밋 파일은 아직 특정 커밋에 속하지 않습니다. 전환 후 덮어쓸 위험이 없으면 유지될 수 있지만, 충돌하는 변경이면 switch가 거절합니다. 거절은 변경을 보호하는 동작이지 Git 고장이 아닙니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0" aria-label="상태도, 작은 화면에서는 좌우로 이동"><img src="../../assets/visuals/branch-rescue.svg" alt="B 커밋은 삭제하지 않습니다. feature 이름을 붙여 보존한 뒤 main 참조만 A로 이동합니다. 공유된 브랜치에는 별도 팀 판단이 필요합니다." width="900" height="530"></div><figcaption>B 커밋은 삭제하지 않습니다. feature 이름을 붙여 보존한 뒤 main 참조만 A로 이동합니다. 공유된 브랜치에는 별도 팀 판단이 필요합니다. 작은 화면에서는 그림을 좌우로 이동해 읽습니다.</figcaption></figure></section>
-<section class="lab-section" id="practice"><h2>1. 시작 상태 만들기</h2><p>수업자료 저장소 루트에서 아래 명령을 실행합니다. 출력된 Set-Location 명령으로 <strong>새 연습 폴더</strong>에 들어갑니다. 기존 프로젝트에서는 복구 명령을 연습하지 않습니다. 재시작할 때는 새 폴더를 생성하고 이전 폴더를 남겨 비교합니다.</p><pre class="lab-code">python scripts/recovery_lab.py committed</pre><p>main에 base 다음 accidental-main 커밋이 있습니다. practice-base 태그는 실습에서 생성한 정확한 시작 커밋입니다. 원격은 없으므로 이 실습 커밋은 공유되지 않았습니다.</p><h2>2. 진단하고 예상하기</h2><pre class="lab-code">git status
+<section class="lab-section" id="practice"><h2>1. 시작 상태 만들기</h2><p>아래 명령은 새 연습 폴더에서 Markdown 파일로 상황을 직접 만듭니다. PowerShell에서 한 줄씩 실행하세요. Set-Content는 파일을 덮어쓰므로 기존 프로젝트에서 실행하지 않습니다. 예상 오류 외의 실패가 나오면 중단합니다. <a href="git-markdown-practice.md" download>전체 직접 실습 MD 다운로드</a></p><pre class="lab-code"># Windows PowerShell. 한 줄씩 실행하고 실패하면 멈춥니다.
+$practiceRoot = Join-Path ([IO.Path]::GetTempPath()) ("git-md-" + [guid]::NewGuid())
+New-Item -ItemType Directory -Path $practiceRoot -ErrorAction Stop
+Set-Location $practiceRoot
+git init -b main
+git config user.name "Practice Student"
+git config user.email "practice@example.invalid"
+# 아래 설정은 이 새 연습 저장소에만 적용합니다.
+git config commit.gpgsign false
+git config core.autocrlf false
+git config core.whitespace cr-at-eol
+git config core.hooksPath .no-hooks
+Set-Content README.md "team=base"
+Set-Content notes.md "note=base"
+git add README.md notes.md
+git commit -m "docs: base"
+git status --short
+
+git tag practice-base
+Set-Content README.md "team=accidental-main"
+git add README.md
+git commit -m "feat: committed on wrong branch"
+git log --oneline --decorate -2</pre><p>main에 base 다음 accidental-main 커밋이 있습니다. practice-base 태그는 실습에서 생성한 정확한 시작 커밋입니다. 원격은 없으므로 이 실습 커밋은 공유되지 않았습니다.</p><h2>2. 진단하고 예상하기</h2><pre class="lab-code">git status
 git branch --show-current
 git log --oneline --decorate --all
 git remote -v</pre><p>명령 실행 전 어떤 파일·참조가 달라질지 말하고, 실행 후 출력과 비교합니다.</p><h2>3. 복구 방법 선택</h2><p>미커밋 상태면 새 feature 브랜치를 만들고 작업을 계속하면 됩니다. 이미 로컬 커밋했다면 커밋을 가리키는 feature를 먼저 만듭니다. 공유한 main이라면 이력 이동을 하지 말고 팀과 revert 또는 수정 PR을 결정합니다.</p><details class="lab-details"><summary>판단 후 복구 절차 펼치기</summary><div><pre class="lab-code">git switch -c feature/rescued
@@ -12,4 +34,4 @@ git branch -f main practice-base</pre></div></details></section>
 <section class="lab-section" id="check"><h2>4. 복구 성공을 검증하기</h2><pre class="lab-code">git log --oneline --graph --decorate --all
 git show main:README.md
 git show feature/rescued:README.md
-git status</pre><p>main은 base, feature/rescued는 accidental-main 내용을 가리킵니다. 현재 브랜치는 feature/rescued이고 clean이어야 합니다. branch -f는 파일이 아니라 지정한 브랜치 참조를 이동했습니다.</p><div class="recovery-warning"><strong>멈춰야 할 경계</strong><p>branch -f도 이력을 가리키는 이름을 바꿉니다. 다른 작업자가 사용하는 main에 그대로 적용하지 않습니다. practice-base가 없는 실제 프로젝트에서 태그 이름이나 기준 해시를 임의로 추측하지 않습니다.</p></div><h2>5. 조건을 바꿔 설명하기</h2><p>미커밋 변경이 있는 상태와 원격 push까지 한 상태에서는 왜 같은 복구를 할 수 없을까요? 전환 거절 재현은 branch 모드에서 수행하고, 다음 임시 보관 실습으로 이어집니다.</p><p>제출할 문서는 없습니다. 화면에서 근거를 가리키며 “현재 상태 → 선택 이유 → 남은 작업”을 설명합니다.</p></section><section class="lab-section"><h2>공식 문서와 연결</h2><p><a href="https://git-scm.com/docs/git-switch">Git switch 공식 문서</a>에서 명령의 입력·출력 범위를 확인합니다. 예제는 PowerShell 기준입니다. 실제 해시·브랜치명은 출력에서 확인하며 그대로 추측해서 입력하지 않습니다.</p></section><div class="lab-footer-nav"><a class="lab-btn" href="index.html">복구 과정 홈</a><a class="lab-btn" href="../index.html">기존 실습으로</a></div></main></div></body></html>
+git status</pre><p>main은 base, feature/rescued는 accidental-main 내용을 가리킵니다. 현재 브랜치는 feature/rescued이고 clean이어야 합니다. branch -f는 파일이 아니라 지정한 브랜치 참조를 이동했습니다.</p><div class="recovery-warning"><strong>멈춰야 할 경계</strong><p>branch -f도 이력을 가리키는 이름을 바꿉니다. 다른 작업자가 사용하는 main에 그대로 적용하지 않습니다. practice-base가 없는 실제 프로젝트에서 태그 이름이나 기준 해시를 임의로 추측하지 않습니다.</p></div><h2>5. 조건을 바꿔 설명하기</h2><p>미커밋 변경이 있는 상태와 원격 push까지 한 상태에서는 왜 같은 복구를 할 수 없을까요? 전환 거절 재현은 <a href="git-markdown-practice.md" download>직접 실습 MD</a>의 branch 준비·복구 절차로 수행하고, 다음 임시 보관 실습으로 이어집니다.</p><p>제출할 문서는 없습니다. 화면에서 근거를 가리키며 “현재 상태 → 선택 이유 → 남은 작업”을 설명합니다.</p></section><section class="lab-section"><h2>공식 문서와 연결</h2><p><a href="https://git-scm.com/docs/git-switch">Git switch 공식 문서</a>에서 명령의 입력·출력 범위를 확인합니다. 예제는 PowerShell 기준입니다. 실제 해시·브랜치명은 출력에서 확인하며 그대로 추측해서 입력하지 않습니다.</p></section><div class="lab-footer-nav"><a class="lab-btn" href="index.html">복구 과정 홈</a><a class="lab-btn" href="../index.html">기존 실습으로</a></div></main></div></body></html>

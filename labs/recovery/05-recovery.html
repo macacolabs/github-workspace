@@ -2,26 +2,92 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>취소·임시 보관·분실 복구는 서로 다른 문제 | Git 복구 실습</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../../css/labs.css"><link rel="stylesheet" href="../../css/recovery.css"></head>
 <body><a class="recovery-skip" href="#lesson">본문으로 건너뛰기</a><div class="lab-layout"><aside class="lab-sidebar"><a class="lab-brand" href="../index.html">← 기존 7개 실습</a><nav aria-label="원리와 복구"><ul class="lab-nav"><li><a href="index.html">학습 순서·연습 환경</a></li><li><a href="01-state.html">상태·스테이징</a></li><li><a href="02-branch.html">브랜치·HEAD</a></li><li><a href="03-sync.html">원격·분기된 이력</a></li><li><a href="04-conflict.html">병합·충돌·중단</a></li><li><a href="05-recovery.html">revert·stash·reflog</a></li><li><a href="06-pr-files.html">PR·파일·안전 경계</a></li><li><a href="07-independent.html">독립 수행 훈련</a></li></ul></nav></aside><main id="lesson" class="lab-main"><div class="lab-eyebrow">원리 → 상태 → 판단 → 복구 → 검증</div><h1 class="lab-title">취소·임시 보관·분실 복구는 서로 다른 문제</h1><p class="lab-lead">‘되돌린다’는 말만으로는 명령을 고를 수 없습니다. 파일만 버릴지, 커밋을 취소할지, 다른 작업을 위해 잠시 치울지, 잃은 커밋을 찾을지 먼저 나눕니다.</p><nav class="recovery-contents" aria-label="단원 내 이동"><a href="#logic">내부 원리</a><a href="#practice">실습</a><a href="#check">검증</a></nav>
 <section class="lab-section" id="logic"><h2>내부에서는 어떤 일이 일어날까?</h2><p>restore --staged는 커밋 후보를 바꾸고 작업 파일을 남깁니다. 일반 restore는 작업 파일 내용을 복원합니다. reset의 커밋 지정 형식은 현재 브랜치의 위치를 이동하며 모드에 따라 index와 작업 트리도 바꿉니다. soft가 파일을 남겨도 공유 이력 변경까지 안전한 것은 아닙니다.</p><p>revert는 대상 커밋의 변경을 반대로 적용한 새 커밋을 만듭니다. 과거 커밋이 이력에 남기 때문에 취소 이유를 추적할 수 있습니다. 이후 변경과 겹치면 revert 자체도 충돌할 수 있습니다.</p><p>stash는 작업 중 내용을 임시로 보관합니다. 기본값은 미추적 파일을 포함하지 않으므로 -u가 필요한지 판단해야 합니다. reflog는 로컬 참조의 이동 기록이며, 커밋하지 않은 모든 편집 내용을 기록하는 백업이 아닙니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0" aria-label="상태도, 작은 화면에서는 좌우로 이동"><img src="../../assets/visuals/revert-history.svg" alt="내용이 이전처럼 보인다는 것과 이력이 이전으로 이동했다는 것은 다릅니다. R은 취소를 기록한 새로운 커밋입니다." width="900" height="530"></div><figcaption>내용이 이전처럼 보인다는 것과 이력이 이전으로 이동했다는 것은 다릅니다. R은 취소를 기록한 새로운 커밋입니다. 작은 화면에서는 그림을 좌우로 이동해 읽습니다.</figcaption></figure></section>
-<section class="lab-section" id="practice"><h2>1. 시작 상태 만들기</h2><p>수업자료 저장소 루트에서 아래 명령을 실행합니다. 출력된 Set-Location 명령으로 <strong>새 연습 폴더</strong>에 들어갑니다. 기존 프로젝트에서는 복구 명령을 연습하지 않습니다. 재시작할 때는 새 폴더를 생성하고 이전 폴더를 남겨 비교합니다.</p><pre class="lab-code">python scripts/recovery_lab.py shared</pre><p>README의 wrong 변경을 커밋한 상태입니다. practice-shared-tip은 팀이 이미 받았다고 가정한 커밋을 표시합니다. 실제 공유 저장소를 위험하게 만들지 않고 취소 이력을 연습합니다.</p><h2>2. 진단하고 예상하기</h2><pre class="lab-code">git status
+<section class="lab-section" id="practice"><h2>1. 시작 상태 만들기</h2><p>아래 명령은 새 연습 폴더에서 Markdown 파일로 상황을 직접 만듭니다. PowerShell에서 한 줄씩 실행하세요. Set-Content는 파일을 덮어쓰므로 기존 프로젝트에서 실행하지 않습니다. 예상 오류 외의 실패가 나오면 중단합니다. <a href="git-markdown-practice.md" download>전체 직접 실습 MD 다운로드</a></p><pre class="lab-code"># Windows PowerShell. 한 줄씩 실행하고 실패하면 멈춥니다.
+$practiceRoot = Join-Path ([IO.Path]::GetTempPath()) ("git-md-" + [guid]::NewGuid())
+New-Item -ItemType Directory -Path $practiceRoot -ErrorAction Stop
+Set-Location $practiceRoot
+git init -b main
+git config user.name "Practice Student"
+git config user.email "practice@example.invalid"
+# 아래 설정은 이 새 연습 저장소에만 적용합니다.
+git config commit.gpgsign false
+git config core.autocrlf false
+git config core.whitespace cr-at-eol
+git config core.hooksPath .no-hooks
+Set-Content README.md "team=base"
+Set-Content notes.md "note=base"
+git add README.md notes.md
+git commit -m "docs: base"
+git status --short
+
+Set-Content README.md "team=wrong"
+git add README.md
+git commit -m "docs: wrong value"
+# 공유됐다고 가정한 커밋에 표시만 붙입니다. 네트워크 전송은 없습니다.
+git tag practice-shared-tip
+git log --oneline --decorate -2</pre><p>README의 wrong 변경을 커밋한 상태입니다. practice-shared-tip은 팀이 이미 받았다고 가정한 커밋을 표시합니다. 실제 공유 저장소를 위험하게 만들지 않고 취소 이력을 연습합니다.</p><h2>2. 진단하고 예상하기</h2><pre class="lab-code">git status
 git show HEAD
 git log --oneline --decorate</pre><p>명령 실행 전 어떤 파일·참조가 달라질지 말하고, 실행 후 출력과 비교합니다.</p><h2>3. 복구 방법 선택</h2><p>이 실습에서는 이미 공유된 커밋이라는 조건이므로 이력 이동 대신 반대 커밋을 남깁니다. merge commit을 revert하는 것은 기준 부모 선택이 추가로 필요하므로 일반 단일 커밋 실습과 구분합니다.</p><details class="lab-details"><summary>판단 후 복구 절차 펼치기</summary><div><pre class="lab-code">git revert --no-edit HEAD</pre></div></details></section>
 <section class="lab-section" id="check"><h2>4. 복구 성공을 검증하기</h2><pre class="lab-code">git log --oneline -3
 Get-Content README.md
 git merge-base --is-ancestor practice-shared-tip HEAD
-git status</pre><p>base → wrong → 취소 커밋 순서가 남고 파일 내용은 base입니다. is-ancestor 종료 코드 0은 원래 커밋이 새 HEAD의 조상으로 남았다는 뜻입니다. 성공한 명령이 항상 문장을 출력하지는 않습니다.</p><div class="recovery-warning"><strong>멈춰야 할 경계</strong><p>restore와 hard reset으로 버린 미커밋 변경은 reflog만으로 복구를 보장할 수 없습니다. 공유 이력 재작성과 secret 이력 삭제는 팀 관리자와 진행합니다.</p></div><h2>5. 조건을 바꿔 설명하기</h2><p>stash 모드: push -u → list/show → apply → 내용 확인 → drop 순서로 draft까지 복구하세요. lost 모드: reflog에서 'feat: detached work' 해시를 찾아 git show로 확인한 뒤 git switch -c rescue/recovered 해시로 보존하세요. HEAD@{1}을 무조건 정답으로 외우지 않습니다.</p><p>제출할 문서는 없습니다. 화면에서 근거를 가리키며 “현재 상태 → 선택 이유 → 남은 작업”을 설명합니다.</p></section><section class="lab-section"><h2>별도 실습 A · 새 파일까지 임시 보관하고 돌아오기</h2><p>수업자료 루트에서 stash 모드를 생성한 뒤 출력된 새 폴더로 이동합니다. notes는 추적 중인 수정 파일, draft는 아직 추적하지 않는 새 파일입니다. 기본 stash와 -u의 차이를 판단합니다.</p><pre class="lab-code">python scripts/recovery_lab.py stash
-# 출력된 Set-Location 명령으로 이동
+git status</pre><p>base → wrong → 취소 커밋 순서가 남고 파일 내용은 base입니다. is-ancestor 종료 코드 0은 원래 커밋이 새 HEAD의 조상으로 남았다는 뜻입니다. 성공한 명령이 항상 문장을 출력하지는 않습니다.</p><div class="recovery-warning"><strong>멈춰야 할 경계</strong><p>restore와 hard reset으로 버린 미커밋 변경은 reflog만으로 복구를 보장할 수 없습니다. 공유 이력 재작성과 secret 이력 삭제는 팀 관리자와 진행합니다.</p></div><h2>5. 조건을 바꿔 설명하기</h2><p>stash 모드: push -u → list/show → apply → 내용 확인 → drop 순서로 draft까지 복구하세요. lost 모드: reflog에서 'feat: detached work' 해시를 찾아 git show로 확인한 뒤 git switch -c rescue/recovered 해시로 보존하세요. HEAD@{1}을 무조건 정답으로 외우지 않습니다.</p><p>제출할 문서는 없습니다. 화면에서 근거를 가리키며 “현재 상태 → 선택 이유 → 남은 작업”을 설명합니다.</p></section><section class="lab-section"><h2>별도 실습 A · 새 파일까지 임시 보관하고 돌아오기</h2><p>아래 공통 준비와 stash 상황 명령을 순서대로 실행합니다. notes는 추적 중인 수정 파일, draft는 아직 추적하지 않는 새 파일입니다. 기본 stash와 -u의 차이를 판단합니다.</p><pre class="lab-code"># Windows PowerShell. 한 줄씩 실행하고 실패하면 멈춥니다.
+$practiceRoot = Join-Path ([IO.Path]::GetTempPath()) ("git-md-" + [guid]::NewGuid())
+New-Item -ItemType Directory -Path $practiceRoot -ErrorAction Stop
+Set-Location $practiceRoot
+git init -b main
+git config user.name "Practice Student"
+git config user.email "practice@example.invalid"
+# 아래 설정은 이 새 연습 저장소에만 적용합니다.
+git config commit.gpgsign false
+git config core.autocrlf false
+git config core.whitespace cr-at-eol
+git config core.hooksPath .no-hooks
+Set-Content README.md "team=base"
+Set-Content notes.md "note=base"
+git add README.md notes.md
+git commit -m "docs: base"
+git status --short
+
+Set-Content notes.md "note=unfinished"
+Set-Content draft.md "draft=keep"
+git status --short
+# 위 명령으로 이동한 새 연습 폴더에서 계속합니다.
 git status --short
 git stash push -u -m "profile WIP"
 git stash list
 git stash show --include-untracked -p 'stash@{0}'
 git stash apply 'stash@{0}'
-Get-Content notes.txt
-Get-Content draft.txt
+Get-Content notes.md
+Get-Content draft.md
 git status --short
 # notes=unfinished, draft=keep 확인 뒤에만 정리
 git stash drop 'stash@{0}'</pre><p>apply는 목록을 유지한 채 적용합니다. pop은 적용에 성공하면 보관 항목을 제거하지만 충돌하면 항목이 남을 수 있습니다. 오류 후 pop을 반복하지 말고 status와 stash list로 현재 상태를 확인합니다. 원래 stage 구분까지 복원해야 한다면 --index의 의미를 별도로 확인합니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0"><img src="../../assets/visuals/stash-return.svg" alt="작업 파일을 stash에 보관하고 apply로 복원한 뒤 검증하고 drop한다" width="900" height="530"></div><figcaption>보관 목록과 작업 파일은 서로 다른 확인 대상입니다. 적용 성공과 파일 보존을 확인하기 전 목록을 지우지 않습니다.</figcaption></figure><p>변형: 보관 뒤 같은 파일을 다른 내용으로 수정·커밋하고 적용하면 충돌할 수 있습니다. 이때 stash 항목은 유지하고 충돌 파일의 최종 내용을 합의합니다. stash apply 충돌은 merge --abort를 무조건 적용할 상황이 아니므로 현재 작업 종류부터 구분합니다.</p><p><a href="https://git-scm.com/docs/git-stash">공식 stash 문서</a></p></section>
-<section class="lab-section"><h2>별도 실습 B · 잃은 커밋에 다시 이름 붙이기</h2><p>lost 모드는 detached HEAD에서 커밋한 뒤 main으로 돌아온 상태입니다. HEAD가 브랜치 이름이 아닌 커밋을 직접 가리키는 동안 만든 작업에 유지할 브랜치가 없었습니다.</p><pre class="lab-code">python scripts/recovery_lab.py lost
-# 출력된 Set-Location 명령으로 이동
+<section class="lab-section"><h2>별도 실습 B · 잃은 커밋에 다시 이름 붙이기</h2><p>lost 모드는 detached HEAD에서 커밋한 뒤 main으로 돌아온 상태입니다. HEAD가 브랜치 이름이 아닌 커밋을 직접 가리키는 동안 만든 작업에 유지할 브랜치가 없었습니다.</p><pre class="lab-code"># Windows PowerShell. 한 줄씩 실행하고 실패하면 멈춥니다.
+$practiceRoot = Join-Path ([IO.Path]::GetTempPath()) ("git-md-" + [guid]::NewGuid())
+New-Item -ItemType Directory -Path $practiceRoot -ErrorAction Stop
+Set-Location $practiceRoot
+git init -b main
+git config user.name "Practice Student"
+git config user.email "practice@example.invalid"
+# 아래 설정은 이 새 연습 저장소에만 적용합니다.
+git config commit.gpgsign false
+git config core.autocrlf false
+git config core.whitespace cr-at-eol
+git config core.hooksPath .no-hooks
+Set-Content README.md "team=base"
+Set-Content notes.md "note=base"
+git add README.md notes.md
+git commit -m "docs: base"
+git status --short
+
+git switch --detach HEAD
+Set-Content README.md "team=lost-work"
+git add README.md
+git commit -m "feat: detached work"
+git switch main
+git reflog -5
+# 위 명령으로 이동한 새 연습 폴더에서 계속합니다.
 git reflog
 # feat: detached work 행의 실제 해시 확인
 git show 실제-해시
