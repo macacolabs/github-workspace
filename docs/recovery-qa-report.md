@@ -38,4 +38,3 @@ revert 후 기존 커밋 조상 관계 보존을 assert로 확인했다.
 3. labs/recovery/03-sync.html: 상태를 보고 복구를 선택하는 흐름
 4. labs/recovery/07-independent.html: 정답 안내 없는 변형 문제
 승인 후에만 main 병합을 진행한다.
-

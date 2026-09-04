@@ -181,4 +181,3 @@ if __name__ == "__main__":
         print(git(folder, "status", "--short", "--branch").stdout)
     else:
         parser.error("Choose a scenario or --verify")
-

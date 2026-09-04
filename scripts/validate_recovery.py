@@ -82,4 +82,3 @@ for folder in ("chapters", "labs"):
 if errors:
     raise SystemExit("\n".join(errors))
 print(f"PASS recovery_pages={len(recovery)} links, anchors, image descriptions, learning sections, existing-page connections")
-
