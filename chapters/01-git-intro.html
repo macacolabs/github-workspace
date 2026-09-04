@@ -7,7 +7,7 @@
     <title>Ch.01 Git이란? | Git & GitHub 완전 정복</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/components.css">
-</head>
+<link rel="stylesheet" href="../css/labs.css"><link rel="stylesheet" href="../css/recovery.css"></head>
 
 <body>
     <div class="layout">
@@ -171,6 +171,8 @@
                         </div>
                     </div>
                 </section>
+<section class="lab-section recovery-extension"><h2>프로젝트에서 연결해 이해하기 · 상태·스테이징</h2><p>README를 수정하고 add한 뒤 다시 수정했습니다. 지금 commit하면 화면에서 보이는 최신 내용이 모두 저장될까요? add는 파일 이름을 예약하는 것이 아니라 그 시점의 내용을 index에 반영합니다.</p><p>Git은 파일 내용(blob), 디렉터리 구조(tree), 부모 커밋과 작성 정보가 있는 commit 객체로 스냅샷을 표현합니다. 파일 내용이 같으면 기존 객체를 재사용할 수 있습니다. 커밋은 매번 전체 폴더를 별도 복사하는 방식이 아닙니다.</p><p>작업 트리는 편집기에서 보는 파일입니다. index는 다음 커밋에 담을 경로와 내용의 목록입니다. HEAD가 가리키는 커밋은 마지막으로 기록된 기준입니다. status는 이 세 상태 사이 차이를 요약합니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0" aria-label="확대 가능한 상태도"><img src="../assets/visuals/state-index.svg" width="900" height="530" alt="위에서 아래로 읽으세요. 세 영역의 README 내용은 동시에 다를 수 있습니다. add는 작업 트리→index, commit은 index→새 커밋입니다."></div><figcaption>위에서 아래로 읽으세요. 세 영역의 README 내용은 동시에 다를 수 있습니다. add는 작업 트리→index, commit은 index→새 커밋입니다.</figcaption></figure><p><a href="../labs/recovery/01-state.html">내부 원리와 재현 가능한 복구 실습으로 이어가기 →</a></p></section>
+
 
                 <!-- 2. Git이란 -->
                 <section class="section">

@@ -93,6 +93,12 @@ foreach ($module in $labPages | Where-Object Name -ne 'index.html') {
     }
 }
 
+Write-Host '[6/6] Recovery learning contract and 9 isolated rehearsals'
+python (Join-Path $PSScriptRoot 'validate_recovery.py')
+if ($LASTEXITCODE -ne 0) { $errors.Add('Recovery learning contract failed') }
+python (Join-Path $PSScriptRoot 'recovery_lab.py') --verify
+if ($LASTEXITCODE -ne 0) { $errors.Add('Recovery command rehearsal failed') }
+
 if ($errors.Count -gt 0) {
     $errors | ForEach-Object { Write-Error $_ }
     exit 1

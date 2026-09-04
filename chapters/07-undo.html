@@ -7,7 +7,7 @@
     <title>Ch.07 실수 되돌리기 | Git & GitHub 완전 정복</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/components.css">
-</head>
+<link rel="stylesheet" href="../css/labs.css"><link rel="stylesheet" href="../css/recovery.css"></head>
 
 <body>
     <div class="layout">
@@ -137,6 +137,8 @@
                         </div>
                     </div>
                 </section>
+<section class="lab-section recovery-extension"><h2>프로젝트에서 연결해 이해하기 · revert·stash·reflog</h2><p>‘되돌린다’는 말만으로는 명령을 고를 수 없습니다. 파일만 버릴지, 커밋을 취소할지, 다른 작업을 위해 잠시 치울지, 잃은 커밋을 찾을지 먼저 나눕니다.</p><p>restore --staged는 커밋 후보를 바꾸고 작업 파일을 남깁니다. 일반 restore는 작업 파일 내용을 복원합니다. reset의 커밋 지정 형식은 현재 브랜치의 위치를 이동하며 모드에 따라 index와 작업 트리도 바꿉니다. soft가 파일을 남겨도 공유 이력 변경까지 안전한 것은 아닙니다.</p><p>revert는 대상 커밋의 변경을 반대로 적용한 새 커밋을 만듭니다. 과거 커밋이 이력에 남기 때문에 취소 이유를 추적할 수 있습니다. 이후 변경과 겹치면 revert 자체도 충돌할 수 있습니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0" aria-label="확대 가능한 상태도"><img src="../assets/visuals/revert-history.svg" width="900" height="530" alt="내용이 이전처럼 보인다는 것과 이력이 이전으로 이동했다는 것은 다릅니다. R은 취소를 기록한 새로운 커밋입니다."></div><figcaption>내용이 이전처럼 보인다는 것과 이력이 이전으로 이동했다는 것은 다릅니다. R은 취소를 기록한 새로운 커밋입니다.</figcaption></figure><p><a href="../labs/recovery/05-recovery.html">내부 원리와 재현 가능한 복구 실습으로 이어가기 →</a></p></section>
+
 
                 <!-- git restore -->
                 <section class="section">
@@ -471,7 +473,7 @@ stash@{1}: WIP on main: 9bc3d2a 이전 작업</span>
                         <div class="practice-step">
                             <div class="practice-step-num">C</div>
                             <div class="practice-step-content">
-                                <div class="practice-step-title">커밋 취소 — reset --soft (가장 안전)</div>
+                                <div class="practice-step-title">커밋 취소 — reset --soft (미공유 이력에서만 판단)</div>
                                 <p class="practice-step-desc">이론의 "--soft: 커밋만 취소, 스테이징 유지". 커밋을 하나 쨨다가 스테이징에 넣어둘 때 쌤니다.
                                 </p>
                                 <div class="code-block terminal">
@@ -550,18 +552,18 @@ Changes not staged for commit:
                             <div class="practice-step-num">F</div>
                             <div class="practice-step-content">
                                 <div class="practice-step-title">reflog으로 --hard reset 후 복구</div>
-                                <p class="practice-step-desc">이론 외 팔맍 팅! --hard reset 후 "삭제했는데"라면 reflog로 해시를 찾아 복구할 수
-                                    있습니다.</p>
+                                <p class="practice-step-desc">로컬 참조 기록에서 이전 커밋을 찾고 복구용 브랜치로 보존합니다. 미커밋 변경의 복구는 보장하지 않습니다.</p>
                                 <div class="code-block terminal">
                                     <div class="code-block-header"><span class="code-lang">Git Bash</span><button
                                             class="copy-btn">복사</button></div>
-                                    <pre><code><span class="comment"># reflog: Git의 모든 작업 이력</span>
+                                    <pre><code><span class="comment"># reflog: 로컬 HEAD·브랜치 등 참조의 이동 기록</span>
 <span class="prompt">$</span> git reflog
 <span class="output">a3f82bc HEAD@{0}: reset: moving to HEAD~1
 b7d9e1f HEAD@{1}: commit: feat: 업데이트   ← 여기로 돌아가요!</span>
 
-<span class="comment"># 해시를 직접 지정해 이동</span>
-<span class="prompt">$</span> git reset --hard b7d9e1f</code></pre>
+<span class="comment"># git show로 찾은 커밋의 내용을 먼저 확인한 뒤 새 브랜치 생성</span>
+<span class="prompt">$</span> git show b7d9e1f
+<span class="prompt">$</span> git switch -c rescue/recovered b7d9e1f</code></pre>
                                 </div>
                             </div>
                             <button class="step-check-btn">⬜ 완료</button>
@@ -574,9 +576,9 @@ b7d9e1f HEAD@{1}: commit: feat: 업데이트   ← 여기로 돌아가요!</span
                                         class="scenario-question"><code>git reset --hard</code> 후 "안
                                         되는데!"라면?</span><span class="scenario-toggle-icon">▶</span></div>
                                 <div class="scenario-body">
-                                    <p class="scenario-cause">--hard는 WD 변경사항도 지우지만, reflog에 커밋이 남아있습니다.</p>
+                                    <p class="scenario-cause">--hard는 작업 파일을 덮어쓸 수 있습니다. 이전 커밋이 로컬 reflog에 남아 있는지 확인하되 미커밋 파일까지 복구된다고 생각하지 않습니다.</p>
                                     <p class="scenario-fix"><code>git reflog</code>으로 해시를 찾고
-                                        <code>git reset --hard 해시</code>로 복구하세요.</p>
+                                        <code>git show 해시</code>로 내용을 확인한 뒤 <code>git switch -c rescue/recovered 해시</code>로 보존하세요. 기록이 만료됐거나 커밋하지 않은 변경은 복구를 보장할 수 없습니다.</p>
                                 </div>
                             </div>
                             <div class="scenario-card">

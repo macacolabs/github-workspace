@@ -7,7 +7,7 @@
     <title>Ch.09 Pull Request & 팀 협업 | Git & GitHub 완전 정복</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/components.css">
-</head>
+<link rel="stylesheet" href="../css/labs.css"><link rel="stylesheet" href="../css/recovery.css"></head>
 
 <body>
     <div class="layout">
@@ -141,6 +141,8 @@
                         </div>
                     </div>
                 </section>
+<section class="lab-section recovery-extension"><h2>PR 내부 기준 · 무엇과 무엇을 비교하는가?</h2><p>PR의 base는 변경을 받을 브랜치이고 head는 변경을 제안하는 브랜치입니다. GitHub는 두 브랜치의 공통 조상 이후 변경을 중심으로 diff를 보여줍니다. 단순히 마지막으로 수정한 파일만 표시하는 화면이 아닙니다.</p><p>따라서 잘못된 기준에서 브랜치를 만들면 관계없는 변경이 포함될 수 있습니다. base/head와 커밋 목록을 먼저 확인하고, 리뷰를 반영한 뒤에는 같은 branch로 새 커밋을 push하여 다시 검증합니다. 자동 병합 가능 여부와 기능 테스트 성공은 다른 판단입니다.</p><figure class="recovery-figure"><div class="recovery-image-scroll" tabindex="0"><img src="../assets/visuals/pr-gates.svg" width="900" height="530" alt="PR 기준 확인, diff와 테스트 검증, 승인 후 병합의 세 단계"></div><figcaption>기준 확인 → 내용 검증 → 승인 후 병합. 어떤 단계가 막혔는지 구분한 뒤 대응합니다.</figcaption></figure><p><a href="../labs/recovery/06-pr-files.html">잘못된 base·리뷰·검증 실패·파일 문제 상세 실습 →</a></p></section>
+
 
                 <!-- PR 실습 -->
                 <section class="section">
